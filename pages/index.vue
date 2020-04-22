@@ -1,31 +1,7 @@
-<template>
-  <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        CovCath-Ordering
-      </h1>
-      <h2 class="subtitle">
-        Student Hardware Payment tracker for Covington Catholic
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
-    </div>
-  </div>
+<template lang="pug">
+section.app
+  h1  This is the barest-bones version of the GBS Student Hardware checkout system.
+  h1.sm_w-14 Check in here, as I will be often deploying new versions.  
 </template>
 
 <script>
