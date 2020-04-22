@@ -1,8 +1,26 @@
-<template>
-  <div>
-    <nuxt />
-  </div>
+<template lang="pug">
+section.default-layout
+  site-header
+  nuxt
 </template>
+
+<script>
+import SiteHeader from '../components/SiteHeader/SiteHeader'
+export default {
+  name: 'app',   
+  data() {
+    return {
+    }
+  },
+  methods:{    
+  },
+  props: {
+  },
+  components:{
+    SiteHeader
+  }
+}
+</script>
 
 <style>
 html {

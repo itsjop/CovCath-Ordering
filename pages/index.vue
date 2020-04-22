@@ -1,7 +1,7 @@
 <template lang="pug">
 section.app
-  h1  This is the barest-bones version of the GBS Student Hardware checkout system.
-  h1.sm_w-14 Check in here, as I will be often deploying new versions.  
+  h1  This is the homepage of the barest-bones version of the GBS Student Hardware checkout system.
+  h1.sm_flex Check in here, as I will be often deploying new versions.  
 </template>
 
 <script>
@@ -14,12 +14,14 @@ export default {
 }
 </script>
 
-<style>
+<style lang="stylus">
 /* Sample `apply` at-rules with Tailwind CSS
 .container {
   @apply min-h-screen flex justify-center items-center text-center mx-auto;
 }
 */
+.default-layout
+  margin-top 100px
 .container {
   margin: 0 auto;
   min-height: 100vh;
