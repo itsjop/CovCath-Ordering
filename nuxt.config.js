@@ -28,6 +28,7 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/vue-tables-2'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -41,7 +42,7 @@ export default {
   */
   modules: [
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv',
+    '@nuxtjs/dotenv', 'bootstrap-vue/nuxt'
   ],
   /*
   ** Build configuration

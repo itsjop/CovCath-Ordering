@@ -1,6 +1,7 @@
 <template lang="pug">
 section#registration
   h1 This is the registration page!
+  
 </template>
 
 <script>
@@ -19,5 +20,5 @@ export default {
 
 <style lang="stylus">
 #registration
-  property value
+  // property value
 </style>

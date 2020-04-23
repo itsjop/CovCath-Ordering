@@ -19,5 +19,5 @@ export default {
 
 <style lang="stylus">
 #UserList
-  property value
+  // property value
 </style>

@@ -8,7 +8,8 @@ section#site-header
       h1 Users
       
     nuxt-link(to="/requests")
-      h1 Device Requests
+      h1 Device Requests 
+        span.text-red-600 (new!)
       
     nuxt-link(to="/register")
       h1 Registration
@@ -32,7 +33,7 @@ export default {
 #site-header
   header
     width 100vw
-    height 100px
+    height 100%
     background-color skyblue 
     position fixed
     top 0
