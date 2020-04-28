@@ -7,6 +7,6 @@
 module.exports = {
   theme: {},
   variants: {},
-  plugins: [],
+  plugins: [],  
   separator: '_',
 }

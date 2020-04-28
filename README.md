@@ -1,6 +1,6 @@
 # CovCath-Ordering
 
-> Student Hardware Payment tracker for Covington Catholic
+> My slick Nuxt.js project
 
 ## Build Setup
 
