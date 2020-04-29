@@ -28,8 +28,8 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~/plugins/vue-tables-2',
-    '~/plugins/bootstrap-vue',
+    '~/plugins/VueFirestore',
+    '~/plugins/VueTailwind',
   ],
   /*
   ** Nuxt.js dev-modules

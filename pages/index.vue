@@ -19,24 +19,12 @@ section.app.bg-gray-800
 
 <script>
 
-// Get rid of this when data is finished being uploaded correctly //
-require("firebase/firestore");
-import hardwareImport from '../fsup-hardware'
-import studentsImport from '../fsup-students'
-import { firebase } from "@firebase/app";
-import "@firebase/firestore";
-import shortid from 'shortid'
-var hri = require('human-readable-ids').hri;
-
-
 export default {  
   data() {
     return {
       studentID:"",
-      // hardwareList: hardwareImport,
-      // studentList: studentsImport
     }
-  },
+  },  
   methods:{
   },
   components: {
@@ -123,6 +111,7 @@ fbupload(){
       orderDate:  obj.orderDate ? obj.orderDate : "",
       assistanceAmount:  obj.assistanceAmount ? obj.assistanceAmount : "",
       balance:  obj.balance ? obj.balance : ""
+      serialNumber: obj.serialNumber ? obj.serialNumber : ""
     }).then(function(docRef) {
         console.log("hardwareRequests Document written with ID: ", obj.id);
     })
