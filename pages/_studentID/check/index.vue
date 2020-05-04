@@ -11,7 +11,7 @@ section#studentSignUp.justify-center.flex-col.align-center
       li a screen for images
       li 7-button keyboard
       li and a mouse
-  nuxt-link.btn.bg-blue-500(:to="'/'+this.$route.params.studentID+'/buy/'") i wanna buy it!!
+  nuxt-link.btn.bg-blue-500(:to="'/'+this.$route.params.studentID+'/checkout/'") i wanna buy it!!
 
 </template>
 

@@ -1,9 +1,7 @@
 
 export default {
   mode: 'universal',
-  /*
-  ** Headers of the page
-  */
+  /*  ** Headers of the page  */
   head: {
     title: process.env.npm_package_name || '',
     meta: [
@@ -14,47 +12,47 @@ export default {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
-  },
-  /*
-  ** Customize the progress-bar color
-  */
+  },  
+
+  /* Customize the progress-bar color  */
   loading: { color: '#fff' },
-  /*
-  ** Global CSS
-  */
-  css: [
-  ],
-  /*
-  ** Plugins to load before mounting the App
-  */
+
+  /* Global CSS  */
+  css: [  ],
+
+  /* Plugins to load before mounting the App  */
   plugins: [
     '~/plugins/VueFirestore',
     '~/plugins/VueTailwind',
   ],
-  /*
-  ** Nuxt.js dev-modules
-  */
+
+  /* Nuxt.js dev-modules  */
   buildModules: [
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
     '@nuxtjs/tailwindcss',
-    'bootstrap-vue/nuxt'
   ],
-  /*
-  ** Nuxt.js modules
-  */
+
+  /* Nuxt.js modules  */
   modules: [
     '@nuxtjs/pwa',
-    // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
-    'bootstrap-vue/nuxt'
+    '@nuxtjs/axios',
+    '@nuxtjs/auth'
   ],
-  /*
-  ** Build configuration
-  */
+
+  /* Options for nuxt auth  */
+  auth: {
+    // Options
+  },
+
+  /* Setting Global Auth */
+  router: {
+    // middleware: ['auth']
+  },
+
+  /* Build configuration  */
   build: {
-    /*
-    ** You can extend webpack config here
-    */
+    /*    ** You can extend webpack config here    */
     extend (config, ctx) {
     }
   }

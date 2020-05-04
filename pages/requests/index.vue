@@ -1,3 +1,7 @@
+// TODO: TODAY
+// Custom Lookup function for Firebase, that .thens and inserts the name of the student
+// Make an Edit function that reliably stores the data in firebase that reliably changes the data locally too
+
 <template lang="pug">
 section#deviceRequests
   .container(class="w-3/4")
@@ -7,15 +11,35 @@ section#deviceRequests
       template(v-slot:row='props')
         tr.text-gray-800(:class="[props.trClass, props.rowIndex % 2 === 0 ? 'bg-gray-100' : '']")
           td(:class='props.tdClass') 
-            | {{props.row.name}}
+            | LOOKUP THIS NAME
           td(:class="{'text-red-500': props.row.amountDue > 0, 'text-green-500': props.row.amountDue <= 0 }") 
-            | ${{(props.row.amountDue/100).toFixed(2)}}
+            | {{new Date(props.row.dateCreated).toLocaleDateString()}}
+          td(:class='props.tdClass')
+            | {{props.row.serial ? props.row.serial : "Not Specified"}}
           td(:class='props.tdClass')
             | ${{(props.row.amountDue/100).toFixed(2)}}
+          td(:class='props.tdClass')
+            | ${{(props.row.assistanceAmount/100).toFixed(2)}}
+          td(:class='props.tdClass')
+            | ${{(props.row.balance/100).toFixed(2)}}
+          td(:class='props.tdClass')
+            | {{props.row.datePaid ? new Date(props.row.datePaid).toLocaleDateString() : "No Date"}}
           td(:class='props.tdClass')
             t-button.border-2(size='sm' variant='secondary' @click="prepModal(props.row)") 
               | Edit
     
+    
+      // Displayed Columns
+      // Associated Student - studentId
+      // Selection - specId
+      // Order Date - dateCreated
+      // Serial Number - serialNumber
+      // Assistance - assistanceAmount
+      // Balance - 86798
+      // Date Paid - datePaid
+      // Status - status
+
+
     t-modal(wrapper-class="bg-blue-100 border-blue-400 text-blue-700 rounded shadow-xl flex flex-col"
             overlay-class="z-40 overflow-auto left-0 top-0 bottom-0 right-0 w-full h-full fixed bg-blue-900 opacity-75"
             body-class="text-xl flex flex-col items-center justify-center p-6 flex-grow"
@@ -35,12 +59,7 @@ section#deviceRequests
 </template>
 
 <script>
-// import 'bootstrap/dist/css/bootstrap.css'
-// import 'bootstrap-vue/dist/bootstrap-vue.css'
-import bootstrap from 'bootstrap-vue'
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 // import '@firebase/auth'
 import db from '../../firebase'
@@ -52,21 +71,54 @@ export default {
       hardwareRequests:[],
       headers: [
         {
-          id: 'name-id',
-          value: 'name',
-          text: 'Summary',
+          id: 'studentname-id',
+          value: 'studentname',
+          text: 'Student Name',
           // className: 'bg-red-200',
+        }, 
+        // {
+        //   id: 'packageSelection-id',
+        //   value: 'packageSelection',
+        //   text: 'Package Selected',
+        //   // className: 'bg-blue-700',
+        // }, 
+        {
+          id: 'orderDate-id',
+          value: 'orderDate',
+          text: 'Order Date',
+          // className: 'bg-blue-700',
+        }, 
+        {
+          id: 'seriak-id',
+          value: 'serial',
+          text: 'Serial #',
+          // className: 'bg-blue-700',
         }, {
           id: 'amountDue-id',
           value: 'amountDue',
           text: 'Amount Due',
-          // className: 'bg-red-200',
+          // className: 'bg-blue-700',
         }, {
           id: 'assistanceAmount-id',
           value: 'assistanceAmount',
           text: 'Assistance Amount',
           // className: 'bg-blue-700',
-        }
+        }, {
+          id: 'balance-id',
+          value: 'balance',
+          text: 'Balance',
+          // className: 'bg-blue-700',
+        }, {
+          id: 'datePaid-id',
+          value: 'datePaid',
+          text: 'Date Paid',
+          // className: 'bg-blue-700',
+        }, {
+          id: 'status-id',
+          value: 'status',
+          text: 'Status',
+          // className: 'bg-blue-700',
+        },
       ],
       tempRow:{}
       
