@@ -9,4 +9,6 @@ module.exports = {
   variants: {},
   plugins: [],  
   separator: '_',
+  corePlugins: {
+  },
 }

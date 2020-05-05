@@ -9,7 +9,7 @@ section#deviceRequests
     button.bg-blue-500.hover_bg-blue-700.text-white.font-bold.py-2.px-4.rounded Add Student
     t-table(:headers="headers" :data="hardwareRequests")
       template(v-slot:row='props')
-        tr.text-gray-800(:class="[props.trClass, props.rowIndex % 2 === 0 ? 'bg-gray-100' : '']")
+        tr.text-gray-800.border-0(:class="[props.trClass, props.rowIndex % 2 === 0 ? 'bg-gray-100' : '']")
           td(:class='props.tdClass') 
             | LOOKUP THIS NAME
           td(:class="{'text-red-500': props.row.amountDue > 0, 'text-green-500': props.row.amountDue <= 0 }") 

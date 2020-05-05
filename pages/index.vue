@@ -2,18 +2,19 @@
 section.app.bg-gray-800
   .container.mx-auto.px-4.h-full.mt-16
     .flex.content-center.items-center.justify-center.h-full
-      .relative.flex.flex-col.min-w-0.break-words.w-full.mb-6.shadow-lg.rounded-lg.bg-gray-300.border-0
+      .relative.flex.flex-col.min-w-0.break-words.w-full.mb-6.shadow-lg.rounded-lg.bg-gray-100.border-0
         .rounded-t.mb-0.px-6.py-6
           .text-center.mb-3
-            h6.text-gray-600.text-lg.font-bold Enter your ID to continue:
+            h6.text-gray-800.text-lg.font-bold Enter your ID to continue:
           form
             .relative.w-full.mb-3
-              label.block.uppercase.text-gray-700.text-xs.font-bold.mb-2(for='grid-password') Student ID
-              input.px-3.py-3.placeholder-gray-400.text-gray-700.bg-white.rounded.text-sm.shadow.w-full(v-model="studentID" type='text' class='focus:outline-none focus:shadow-outline' placeholder='CoolDinosaurBanana' style='transition: all 0.15s ease 0s;')
+              label.block.uppercase.text-gray-800.text-xs.font-bold.mb-2(for='grid-password') Student ID
+              input.px-3.py-3.placeholder-gray-500.text-gray-800.bg-white.rounded.text-sm.shadow.w-full(v-model="studentId" type='text' class='focus:outline-none focus:shadow-outline' placeholder='e.g. cool-dinosaur-27' style='transition: all 0.15s ease 0s;')
             .text-center.mt-6
-              nuxt-link.bg-gray-900.text-white.text-sm.font-bold.uppercase.px-6.py-3.rounded.shadow.outline-none.mr-1.mb-1.w-full(
-                :to="studentID+/check/"  class='active:bg-gray-700 hover:shadow-lg focus:outline-none' type='button' style='transition: all 0.15s ease 0s;')
-                | Sign In
+              nuxt-link.text-white.text-sm.font-bold.px-6.py-3.rounded.shadow.outline-none.mr-1.mb-1.w-full.active_bg-gray-700.hover_shadow-lg.focus_outline-none(
+                :to="studentId+/check/" :event="studentId.length > 0 ? 'click' : ''" 
+                :class="validCode ? 'bg-green-500 cursor-pointer' : 'bg-gray-500 cursor-not-allowed' " type='button' style='transition: all 0.15s ease 0s;')
+                | {{validCode ? "Sign in" : "Not a valid ID."}}
           //- button.button.bg-blue-500(@click="fbupload") fbsupasdf
               
 
@@ -29,16 +30,21 @@ var hri = require('human-readable-ids').hri;
 export default {  
   data() {
     return {
-      studentID:"",
+      studentId:"",
       // studentList: studentListing,
       // hardwareList: hardwareListing
     }
   },  
-  methods:{
-    
+  
+  methods:{    
   },
   components: {
-  }
+  },
+  computed: {
+    validCode(){
+      return this.studentId.match(/[a-z]+[-a-z]+(-[0-9]+)+/g)
+    }
+  },
 }
 </script>
 
