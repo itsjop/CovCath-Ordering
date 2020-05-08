@@ -7,8 +7,11 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
     ],
+    // script: [
+    //   { hid: 'stripe', src: 'https://js.stripe.com/v3/', defer: true }
+    // ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
@@ -37,9 +40,16 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/dotenv',
     '@nuxtjs/axios',
-    '@nuxtjs/auth'
-  ],
-
+    '@nuxtjs/auth',
+    ['nuxt-stripe-module', {
+      /* module options */
+      version: 'v3', // Default
+    }],
+  ],  
+  stripe: {
+    version: 'v3',
+    publishableKey: process.env.NUXT_ENV_STRIPE_PUBLISH_TEST_KEY || '',
+  },
   /* Options for nuxt auth  */
   auth: {
     // Options

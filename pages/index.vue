@@ -6,14 +6,23 @@ section.app.bg-gray-800
         .rounded-t.mb-0.px-6.py-6
           .text-center.mb-3
             h6.text-gray-800.text-lg.font-bold Enter your ID to continue:
-          form
+          form(@submit.prevent="submitCode")
             .relative.w-full.mb-3
               label.block.uppercase.text-gray-800.text-xs.font-bold.mb-2(for='grid-password') Student ID
-              input.px-3.py-3.placeholder-gray-500.text-gray-800.bg-white.rounded.text-sm.shadow.w-full(v-model="studentId" type='text' class='focus:outline-none focus:shadow-outline' placeholder='e.g. cool-dinosaur-27' style='transition: all 0.15s ease 0s;')
+              input.px-3.py-3.placeholder-gray-500.text-gray-800.bg-white.rounded.text-sm.shadow.w-full.focus_outline-none.focus_shadow-outline(
+                v-model="studentId" 
+                type='text' 
+                :class=" (studentId.length <15)? '' : (validCode  ? 'greeen' : '')"
+                placeholder='e.g. cool-dinosaur-27' 
+                style='transition: all 0.15s ease 0s;'
+                )
             .text-center.mt-6
               nuxt-link.text-white.text-sm.font-bold.px-6.py-3.rounded.shadow.outline-none.mr-1.mb-1.w-full.active_bg-gray-700.hover_shadow-lg.focus_outline-none(
-                :to="studentId+/check/" :event="studentId.length > 0 ? 'click' : ''" 
-                :class="validCode ? 'bg-green-500 cursor-pointer' : 'bg-gray-500 cursor-not-allowed' " type='button' style='transition: all 0.15s ease 0s;')
+                :to="studentId+/check/" 
+                :event="studentId.length > 0 ? 'click' : ''" 
+                :class="validCode ? 'bg-green-500 cursor-pointer' : 'bg-gray-500 cursor-not-allowed' " 
+                type='button' 
+                style='transition: all 0.15s ease 0s;')
                 | {{validCode ? "Sign in" : "Not a valid ID."}}
           //- button.button.bg-blue-500(@click="fbupload") fbsupasdf
               
@@ -37,6 +46,9 @@ export default {
   },  
   
   methods:{    
+    submitCode(){    
+      if (this.validCode) $nuxt.$router.replace({ path: '/'+this.studentId+"/check" });
+    }
   },
   components: {
   },
@@ -65,6 +77,16 @@ export default {
   width 80vmin
   max-width 500px
   height 100%
+.reddd:focus
+  border: 2px solid #ed5642 !important;
+  box-shadow: 0 0 3px #ed5642 !important;
+  -moz-box-shadow: 0 0 3px #333 !important;
+  -webkit-box-shadow: 0 0 3px #333 !important;
+.greeen:focus
+  border: 2px solid #34eb17 !important;
+  box-shadow: 0 0 3px #34eb17 !important;
+  -moz-box-shadow: 0 0 3px #333 !important;
+  -webkit-box-shadow: 0 0 3px #333 !important;
 
 </style>
 
