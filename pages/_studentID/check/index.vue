@@ -21,10 +21,10 @@ section#studentModelCheck.justify-center.flex-col.align-center
             span ${{((model.price - studentInfo[0].assistance)/100).toFixed(2)}}
           span.tag(v-else)
             span ${{(model.price/100).toFixed(2)}}
-      stripe-checkout.buybutton.bg-blue-500.text-white.font-bold.py-2.px-4.rounded.hover_bg-blue-700(
+      //- stripe-checkout.buybutton.bg-blue-500.text-white.font-bold.py-2.px-4.rounded.hover_bg-blue-700(
           ref='checkoutRef' :pk='pk' :items='items' :successurl='successUrl' :cancelurl='cancelUrl' :billingAddressCollection='billingAddressCollection' :locale="locale")
-        template(slot='checkout-button')
-          button#checkout-button-sku_HEL9wQzNu9XFG1(@click='checkout') Shutup and take my money!
+      //- template(slot='checkout-button')
+      button#checkout-button-sku_HEL9wQzNu9XFG1(@click='checkout') Shutup and take my money!
       //- nuxt-link.buybutton.bg-blue-500.text-white.font-bold.py-2.px-4.rounded.hover_bg-blue-700( :to="'/'+$route.params.studentID+'/checkout/'")
       //-   | i wanna buy it!!
         
@@ -66,7 +66,9 @@ export default {
         successUrl: 'http://localhost:3000/success',
         cancelUrl: 'http://localhost:3000/canceled',        
         clientReferenceId: this.studentInfo[0].code,
-        description: this.studentInfo[0].code
+        paymentIntentData:{
+          metadata:  {studentID: this.studentInfo[0].code},
+        }
       })
       .then(function (result) {
         if (result.error) {

@@ -13,6 +13,12 @@ section#site-header
       
     nuxt-link(to="/register")
       h1 Registration
+    .logcheck(v-if="$auth.loggedIn") 
+      p whelcome, {{$auth.user.email}}
+      button.border-2 log out      
+
+    nuxt-link(to="/login")
+      h1 Login
 </template> 
 
 <script>
