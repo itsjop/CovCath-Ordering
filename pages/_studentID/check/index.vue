@@ -66,9 +66,6 @@ export default {
         successUrl: 'http://localhost:3000/success',
         cancelUrl: 'http://localhost:3000/canceled',        
         clientReferenceId: this.studentInfo[0].code,
-        paymentIntentData:{
-          metadata:  {studentID: this.studentInfo[0].code},
-        }
       })
       .then(function (result) {
         if (result.error) {
@@ -83,8 +80,6 @@ export default {
   components: {
     StripeCheckout
   },
-  props: {
-  }
 }
 </script>
 

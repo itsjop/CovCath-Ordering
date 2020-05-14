@@ -24,6 +24,7 @@ export default {
   plugins: [
     '~/plugins/VueFirestore',
     '~/plugins/VueTailwind',
+    '~/plugins/firebase.js'
   ],
 
   /* Nuxt.js dev-modules  */
@@ -36,52 +37,69 @@ export default {
   /* Nuxt.js modules  */
   modules: [
     '@nuxtjs/pwa',
-    '@nuxtjs/firebase',
+    // '@nuxtjs/firebase',
     '@nuxtjs/dotenv',
     '@nuxtjs/axios',
-    '@nuxtjs/auth',
+    '@nuxtjs/auth',    
+    '@nuxtjs/toast',
     ['nuxt-stripe-module', {
       /* module options */
       version: 'v3', // Default
     }],
     
+    // ['@nuxtjs/firebase', {
+    //   config: {
+    //     production: {
+    //       apiKey: process.env.NUXT_ENV_FIREBASE_APIKEY,
+    //       authDomain: process.env.NUXT_ENV_FIREBASE_AUTHDOMAIN,
+    //       databaseURL: process.env.NUXT_ENV_FIREBASE_DATABASEURL,
+    //       projectId: process.env.NUXT_ENV_FIREBASE_PROJECTID,
+    //       storageBucket: process.env.NUXT_ENV_FIREBASE_STORAGEBUCKET,
+    //       messagingSenderId: process.env.NUXT_ENV_FIREBASE_MESSAGING_SENDER_ID,
+    //       appId: process.env.NUXT_ENV_FIREBASE_APPID,
+    //       measurementId: process.env.NUXT_ENV_FIREBASE_MEASUREMENT_ID  
+    //     }
+    //   },      
+    //   customEnv: true,
+    //   services: {
+    //     auth: {
+    //       ssr: true
+    //     }
+    //   },
+    // }]
   ],  
-
-  firebase:{
-    config: {
-      apiKey: process.env.NUXT_ENV_FIREBASE_APIKEY,
-      authDomain: process.env.NUXT_ENV_FIREBASE_AUTHDOMAIN,
-      databaseURL: process.env.NUXT_ENV_FIREBASE_DATABASEURL,
-      projectId: process.env.NUXT_ENV_FIREBASE_PROJECTID,
-      storageBucket: process.env.NUXT_ENV_FIREBASE_STORAGEBUCKET,
-      messagingSenderId: process.env.NUXT_ENV_FIREBASE_MESSAGING_SENDER_ID,
-      appId: process.env.NUXT_ENV_FIREBASE_APPID,
-      measurementId: process.env.NUXT_ENV_FIREBASE_MEASUREMENT_ID  
-    },
-    services: {
-      auth: {
-        ssr: true
-      }
-    }
-  },
   
+
+  toast: {
+    position: 'top-right',
+    register: [ // Register custom toasts
+      {
+        name: 'my-error',
+        message: 'Oops...Something went wrong',
+        options: {
+          type: 'error'
+        }
+      }
+    ]
+  },
+
   stripe: {
     version: 'v3',
     publishableKey: process.env.NUXT_ENV_STRIPE_PUBLISH_TEST_KEY || '',
   },
 
-  /* Options for nuxt auth  */
-  auth: {
-    strategies:{
-      local:{
-        endpoints:{          
-          login: { url: `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[${process.env.NUXT_ENV_FIREBASE_APIKEY}]`, method: 'post', propertyName: 'token' },
-          logout: { url: `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[${process.env.NUXT_ENV_FIREBASE_APIKEY}]`, method: 'post' },
-          // user: { url: '/api/auth/user', method: 'get', propertyName: 'user' }
-        }
-      }
-    }
-  },
+  // /* Options for nuxt auth  */
+  // auth: {
+  //   strategies:{
+  //     local:{
+  //       endpoints:{          
+  //         login: { url: `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[${process.env.NUXT_ENV_FIREBASE_APIKEY}]`, method: 'post', propertyName: 'token' },
+  //         logout: { url: `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[${process.env.NUXT_ENV_FIREBASE_APIKEY}]`, method: 'post' },
+  //         // user: { url: '/api/auth/user', method: 'get', propertyName: 'user' }
+  //       }
+  //     }
+  //   }
+  // },
 
   /* Setting Global Auth */
   router: {

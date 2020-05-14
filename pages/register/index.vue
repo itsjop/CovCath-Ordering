@@ -2,7 +2,7 @@
 section#register
   h1.text-xl Register
   .login.bg-white.grid
-    user-auth-form(buttonText="Register" :submitForm="registerUser" hasName="true")
+    user-auth-form(buttonText="Register" :submitForm="registerUser" registering=true)
 
 
 
@@ -13,6 +13,7 @@ section#register
 
 <script>
 import firebase from "firebase";
+import db from '../../firebase'
 import userAuthForm from '../../components/UserAuthForm/UserAuthForm'
 
 export default {

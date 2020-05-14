@@ -4,10 +4,13 @@ section#UserList
 </template>
 
 <script>
+
+import firebase from 'firebase'
 export default {
   name: 'UserList',   
   data() {
     return {
+        authenticatedUser:"",
         headers:['Name', 'Email', 'Age'],
         tableData: [
           { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
@@ -20,6 +23,14 @@ export default {
   methods:{    
   },
   props: {
+  },
+  
+  beforeMount(){    
+    firebase.auth().onAuthStateChanged(user => (this.authenticatedUser = user))
+    if(!firebase.auth().currentUser) {
+      $nuxt.$router.replace({ path: '/' });
+      this.$toast.error("Access denied. You are not logged in.")
+    }
   }
 }
 </script>

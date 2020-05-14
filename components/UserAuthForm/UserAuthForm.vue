@@ -1,53 +1,119 @@
 <template lang="pug">
-section#userAuthForm
-  v-form(v-model="valid")
-    v-text-field(
-      label="Name" 
-      v-if="hasName"
-      v-model="userInfo.name" 
-      placeholder="Jane Withenberg" 
-      :rules="[required('name')]"
-    )
-    v-text-field(
-      label="Email" 
-      v-model="userInfo.email" 
-      placeholder="name@email.com" 
-      :rules="[required('email'), emailFormat()]"
-    )
-    v-text-field(
-      label="Password"
-      :type="showPassword ? 'text' : 'password'" 
-      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" 
-      @click:append="showPassword = !showPassword"
-      counter = true
-      :rules="[required('password'), minLength('password',8)]"
-      v-model="userInfo.password" 
-    )
-    v-btn.button.bg-blue-500.p-3.rounded(@click="submitForm(userInfo)" :disabled="!valid") {{buttonText}}
+section#userAuthForm  
+  .text-black(v-if='authenticatedUser')
+    p You are logged in as {{ authenticatedUser.email }}.
+    p Logout?
+    button(@click.prevent='logout') Logout
+  .text-black(v-else='')
+    form.grid(@submit.prevent='loginOrRegister')
+      input(type='email' v-model='email' placeholder='Your email address')
+      input(type='password' v-model='password' placeholder='Your password')
+      input(v-if='registering' type='password' v-model='registrationPassword' placeholder='Re-enter Password')
+      button(v-text="registering ? 'Register' : 'Login'")
+    .error {{errorMessage}}
 </template>
 
 <script>
-import validations from "@/utils/validations"
+import firebase from 'firebase'
 
 export default {
-  name: 'userAuthForm',   
+  name: 'UserAuthForm',
+  
   data() {
     return {
-      valid: false,
-      showPassword: false,
-      userInfo: {
-        email: '',
-        password: ''
-      },
-      ...validations
+      authenticatedUser: null,
+      email: '',
+      password: '',
+      registrationPassword: '',
+      errorMessage: ""
     }
   },
-  methods:{    
+  methods: {
+    register() {
+      if (this.password === this.registrationPassword) {
+        if(authenticatedUser){
+          firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(()=>{            
+            this.$toast.success("Account created. Please check your mail for a verification link.")
+          }).catch(error => {
+            this.$toast.error("Error: "+error)
+          })  
+        }else{          
+          this.$toast.error("You are not logged in. You must be an authorized user to create another's account.")
+        }
+      } else {
+        // display error message
+        this.errorMessage = "Your passwords do not match. Try again."
+      }
+    },
+    login() {
+      firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(()=>{
+        this.$toast.success("Success! You are now logged in.")
+        $nuxt.$router.replace({ path: '/users' });
+      }).catch(error => {
+        this.$toast.error("Error: "+error)
+      })        
+    },
+    loginOrRegister() {
+      this.errorMessage = ""
+      if (this.registering) {
+        this.register()
+      } else {
+        this.login()
+      }
+    },
+    logout() {
+      firebase.auth().signOut().then(()=>{
+        this.$toast.success("Success! You are now logged out.")
+        $nuxt.$router.replace({ path: '/' });
+      }).catch(error => {
+        this.$toast.error("Error: "+error)
+      })        
+    },
+    
+    // async login() {      
+    //   try {
+    //     await this.$store.dispatch('login', {
+    //       username: this.email,
+    //       password: this.password
+    //     })
+    //     this.email = ''
+    //     this.password = ''
+    //     this.errorMessage = null
+    //   } catch (e) {
+    //     this.errorMessage = e.message
+    //   }
+    // },
   },
-  props: ["submitForm", "buttonText", "hasName"]
+  created() {
+    firebase.auth().onAuthStateChanged(user => (this.authenticatedUser = user))
+  },
+  props: {
+    registering: Boolean
+  }
 }
 </script>
 
 <style lang="stylus">
 // #userAuthForm
+.logger
+  display grid 
+  justify-content  center
+  justify-items  center
+  gap 5px
+  color black
+  hr
+    width 80%
+    border-width 2px
+    border-top 0
+    border-style dashed
+.user, .pass
+  display grid
+  justify-content center
+  input
+    border 0px black solid 
+    border-bottom 1px solid
+    font-size .9em
+  .email 
+    display flex
+    justify-content center
 </style>
