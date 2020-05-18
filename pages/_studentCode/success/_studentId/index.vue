@@ -61,6 +61,7 @@ export default {
     confirmOrder(studentID){
       db.collection('students').doc(this.studentId).update({
         paid: true,
+        paymentStatus: "completed",
         paidDate: new Date()
       }).then(querySnapshot => {
         this.allConfirmed = true

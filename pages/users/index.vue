@@ -6,6 +6,7 @@ section#UserList
 <script>
 
 import firebase from 'firebase'
+import { db } from '../../firebase'
 export default {
   name: 'UserList',   
   data() {

@@ -42,7 +42,7 @@ section#studentModelCheck.justify-center.flex-col.align-center
 
 <script>
 
-import { db } from '../../../firebase'
+import { db } from "~/firebase"
 import { StripeCheckout } from 'vue-stripe-checkout';
 import VueTailwindModal from 'vue-tailwind-modal'
 
@@ -72,22 +72,26 @@ export default {
       this.$refs.modal.show()
     },
     checkout () {
-      var stripe = Stripe(process.env.NUXT_ENV_STRIPE_PUBLISH_TEST_KEY);
-      var checkoutButton = document.getElementById('checkout-button-sku_HEL9wQzNu9XFG1');
-      stripe.redirectToCheckout({
-        items: [{sku: 'sku_HEL9wQzNu9XFG1', quantity: 1}],
-        successUrl: `http://localhost:3000/${this.studentInfo[0].code}/success/${this.studentInfo[0].id}`,
-        cancelUrl: `http://localhost:3000/${this.studentInfo[0].code}/check`,        
-        clientReferenceId: this.studentInfo[0].code,
+      db.collection('students').doc(this.studentInfo[0].id).update({
+        paymentStatus: "unconfirmed"
+      }).then(querySnapshot => {
+        var stripe = Stripe(process.env.NUXT_ENV_STRIPE_PUBLISH_TEST_KEY);
+        var checkoutButton = document.getElementById('checkout-button-sku_HEL9wQzNu9XFG1');
+        stripe.redirectToCheckout({
+          items: [{sku: 'sku_HEL9wQzNu9XFG1', quantity: 1}],
+          successUrl: `http://localhost:3000/${this.studentInfo[0].code}/success/${this.studentInfo[0].id}`,
+          cancelUrl: `http://localhost:3000/${this.studentInfo[0].code}/check`,        
+          clientReferenceId: this.studentInfo[0].code,
+        })
+        .then(function (result) {
+          if (result.error) {
+            // If `redirectToCheckout` fails due to a browser or network
+            // error, display the localized error message to your customer.
+            var displayError = document.getElementById('error-message');
+            displayError.textContent = result.error.message;
+          }
+        });
       })
-      .then(function (result) {
-        if (result.error) {
-          // If `redirectToCheckout` fails due to a browser or network
-          // error, display the localized error message to your customer.
-          var displayError = document.getElementById('error-message');
-          displayError.textContent = result.error.message;
-        }
-      });
     }
   },
   components: {

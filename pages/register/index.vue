@@ -12,8 +12,8 @@ section#register
 </template>
 
 <script>
-import firebase from "firebase";
 import { db } from '../../firebase'
+import firebase from "firebase";
 import userAuthForm from '../../components/UserAuthForm/UserAuthForm'
 
 export default {
