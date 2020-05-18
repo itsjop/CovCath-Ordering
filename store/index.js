@@ -1,50 +1,38 @@
-// import Vuex from 'vuex'
-// import firebase, {auth, GoogleProvider} from '@/services/fireinit.js'
+// import axios from 'axios'
+// import firebase from 'firebase'
 
-// const createStore = () => {
-//   return new Vuex.Store({
-//     state: {
-//       user: null
-//     },
-//     getters: {
-//       activeUser: (state, getters) => {
-//         return state.user
-//       }
-//     },
-//     mutations: {
-//       setUser (state, payload) {
-//         state.user = payload
-//       }
-//     },
-//     actions: {
-//       signInWithEmail({commit}, payload){
-//         firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
-//           .then(function(result) {
-//             console.log("user", result.user.tenantId) 
-//           }).catch(function(error) {
-//             // Handle error.
-//           });
-//       },
-//       autoSignIn ({commit}, payload) {
-//         console.log("autosignin")
-//         commit('setUser', payload)
-//       },
+// export const state = () => ({
+//   authUser: null
+// })
 
-//       signInWithGoogle ({commit}) {
-//         return new Promise((resolve, reject) => {
-//           console.log("sign in with google")
-//           auth.signInWithRedirect(GoogleProvider)
-//           resolve()
-//         })
-//       },
-
-//       signOut ({commit}) {
-//         auth.signOut().then(() => {
-//           commit('setUser', null)
-//         }).catch(err => console.log(error))
-//       }
-//     }
-//   })
+// export const mutations = {
+//   SET_USER (state, user) {
+//     state.authUser = user
+//   }
 // }
 
-// export default createStore
+// export const actions = {
+//   // nuxtServerInit is called by Nuxt.js before server-rendering every page
+//   nuxtServerInit ({ commit }, { req }) {
+//     if (req.session && req.session.authUser) {
+//       commit('SET_USER', req.session.authUser)
+//     }
+//   },
+//   async login ({ commit }, { username, password }) {
+//     try {
+//       const { data } = await firebase.auth().signInWithEmailAndPassword(username, password).then(console.log("then"))
+//       commit('SET_USER', data)
+//     } catch (error) {
+//       if (error.response && error.response.status === 401) {
+//         throw new Error('Bad credentials')
+//       }
+//       throw error
+//     }
+//   },
+
+//   async logout ({ commit }) {
+//     await axios.post('/api/logout')
+//     commit('SET_USER', null)
+//   }
+
+// }

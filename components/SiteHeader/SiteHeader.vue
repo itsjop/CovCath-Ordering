@@ -4,31 +4,44 @@ section#site-header
     nuxt-link(to="/")
       img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Covington_Catholic_High_School_logo.svg/1200px-Covington_Catholic_High_School_logo.svg.png") 
       
-    nuxt-link(to="/users")
+    nuxt-link(to="/users" v-if="authenticatedUser")
       h1 Users
       
-    nuxt-link(to="/requests")
+    nuxt-link(to="/requests" v-if="authenticatedUser")
       h1 Device Requests 
         span.text-red-600 (new!)
       
-    nuxt-link(to="/register")
-      h1 Registration
-    .logcheck(v-if="$auth.loggedIn") 
-      p whelcome, {{$auth.user.email}}
-      button.border-2 log out      
+    nuxt-link(to="/register" v-if="authenticatedUser")
+      h1 Register New Account
 
-    nuxt-link(to="/login")
+    .logcheck.grid.justify-center(v-if="authenticatedUser") 
+      p Welcome, {{authenticatedUser.email}}
+      button.border-2.border-gray-900.border-solid.px-2.rounded(@click.prevent='logout') log out      
+
+    nuxt-link(to="/login" v-if="!authenticatedUser")
       h1 Login
 </template> 
 
 <script>
+import firebase from 'firebase'
+
 export default {
   name: 'SiteHeader',   
   data() {
     return {
+      authenticatedUser: null,
     }
   },
-  methods:{    
+  created() {
+    firebase.auth().onAuthStateChanged(user => (this.authenticatedUser = user))
+  },
+  methods:{   
+    logout() {
+      firebase.auth().signOut().then(()=>{        
+        this.$toast.success("You are now logged out.")
+        $nuxt.$router.replace({ path: '/' });
+      })
+    } 
   },
   props: {
   }

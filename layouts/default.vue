@@ -1,5 +1,6 @@
 <template lang="pug">
 section.default-layout.bg-gray-800.text-gray-100
+  //- script(src="https://js.stripe.com/v3/") 
   site-header
   nuxt
 </template>

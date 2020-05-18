@@ -3,8 +3,8 @@
 section#studentModelCheck.justify-center.flex-col.align-center
   script(type="application/javascript" src="js.stripe.com/v3")
   h1.text-center.text-4xl Welcome, {{studentInfo[0] ? studentInfo[0].name : ''}}!
-  .specsheet.flex.justify-center(class='w-full')
-    .model.bg-white.rounded-md.border-8.border-white.border-solid.text-gray-800.p-5.grid(class='w-1/2' v-if="modelList" v-for="model in modelList")
+  .specsheet.flex.justify-center.sm_px-12.md_p-0(class='w-full')
+    .model.bg-white.rounded-md.border-8.border-white.border-solid.text-gray-800.p-5.grid(class='w-full lg_w-1/2 md_w-3/4' v-if="modelList" v-for="model in modelList")
       h1.title.font-bold.text-3xl {{model.title}}
       img(:src="model.image")
       ul.details.list-disc
@@ -15,7 +15,7 @@ section#studentModelCheck.justify-center.flex-col.align-center
       .disclaimer
         p(v-for="disclaimer in model.disclaimers") {{disclaimer}}
       .price(v-if="studentInfo[0]")
-        h1 Purchase for
+        button.text-white.bg-blue-500.rounded.p-4.px-4.mt-8(@click="showModal") Purchase for 
           span.tag(v-if="studentInfo[0].assistance")
             span.line-through ${{(model.price/100).toFixed(2)}}
             span ${{((model.price - studentInfo[0].assistance)/100).toFixed(2)}}
@@ -24,17 +24,27 @@ section#studentModelCheck.justify-center.flex-col.align-center
       //- stripe-checkout.buybutton.bg-blue-500.text-white.font-bold.py-2.px-4.rounded.hover_bg-blue-700(
           ref='checkoutRef' :pk='pk' :items='items' :successurl='successUrl' :cancelurl='cancelUrl' :billingAddressCollection='billingAddressCollection' :locale="locale")
       //- template(slot='checkout-button')
-      button#checkout-button-sku_HEL9wQzNu9XFG1(@click='checkout') Shutup and take my money!
-      //- nuxt-link.buybutton.bg-blue-500.text-white.font-bold.py-2.px-4.rounded.hover_bg-blue-700( :to="'/'+$route.params.studentID+'/checkout/'")
+      //- nuxt-link.buybutton.bg-blue-500.text-white.font-bold.py-2.px-4.rounded.hover_bg-blue-700( :to="'/'+$route.params.studentCode+'/checkout/'")
       //-   | i wanna buy it!!
-        
+  
+  transition(name="fade")
+    t-modal( ref="modal") 
+      .mod.text-gray-800.grid.justify-center.content-around.h-full
+        h1.text-center.font-light.text-3xl Before you Check Out:
+        h1.text-center.font-light.text-xl.mt-8 After finishing checkout, do 
+          span.font-bold not 
+          | close your browser, or your registration will 
+          span.font-bold not 
+          | be automatically updated.
+        button#checkout-button-sku_HEL9wQzNu9XFG1.text-white.bg-blue-500.rounded.p-4.px-4.mt-8(@click='checkout') I Understand, Proceed to Checkout
 
 </template>
 
 <script>
 
-import db from '../../../firebase'
+import { db } from '../../../firebase'
 import { StripeCheckout } from 'vue-stripe-checkout';
+import VueTailwindModal from 'vue-tailwind-modal'
 
 export default {
   name: 'studentModelCheck',   
@@ -42,13 +52,14 @@ export default {
     return {
       orgInfo: '',
       studentInfo: '',
+      modal: false
     }
   },
   
   firestore() {    
     return {
       orgInfo: db.collection('orgs').doc('covCath'),
-      studentInfo: db.collection('students').where('code', '==', this.$route.params.studentID)
+      studentInfo: db.collection('students').where('code', '==', this.$route.params.studentCode)
     }
   },
   computed:{
@@ -57,14 +68,16 @@ export default {
     }
   },
   methods:{    
+    showModal(){
+      this.$refs.modal.show()
+    },
     checkout () {
       var stripe = Stripe(process.env.NUXT_ENV_STRIPE_PUBLISH_TEST_KEY);
-
       var checkoutButton = document.getElementById('checkout-button-sku_HEL9wQzNu9XFG1');
       stripe.redirectToCheckout({
         items: [{sku: 'sku_HEL9wQzNu9XFG1', quantity: 1}],
-        successUrl: 'http://localhost:3000/success',
-        cancelUrl: 'http://localhost:3000/canceled',        
+        successUrl: `http://localhost:3000/${this.studentInfo[0].code}/success/${this.studentInfo[0].id}`,
+        cancelUrl: `http://localhost:3000/${this.studentInfo[0].code}/check`,        
         clientReferenceId: this.studentInfo[0].code,
       })
       .then(function (result) {
@@ -78,12 +91,25 @@ export default {
     }
   },
   components: {
-    StripeCheckout
+    StripeCheckout,
+    VueTailwindModal,
   },
+  props: {
+  }
 }
 </script>
 
 <style lang="stylus">
+
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  position absolute
+}
+
 #studentModelCheck
   grid-template-rows auto auto
   .model

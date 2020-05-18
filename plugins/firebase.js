@@ -1,5 +1,4 @@
-import firebase from 'firebase/app'
-import 'firebase/firestore'
+import firebase from 'firebase'
 
 let app = null;
 
@@ -17,6 +16,5 @@ const firebaseConfig = {
 app = firebase.apps.length
   ? firebase.app()
   : firebase.initializeApp(firebaseConfig)
-  
 
-export const db = app.firestore()
+export const db = app.database()

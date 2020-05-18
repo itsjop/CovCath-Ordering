@@ -23,7 +23,7 @@ section.app.bg-gray-800
                 :class="validCode ? 'bg-green-500 cursor-pointer' : 'bg-gray-500 cursor-not-allowed' " 
                 type='button' 
                 style='transition: all 0.15s ease 0s;')
-                | {{validCode ? "Sign in" : "Not a valid ID."}}
+                | {{studentId.length === 0 ? "Enter your ID." :(validCode ? "Sign in" : "Not a valid ID.")}}
           //- button.button.bg-blue-500(@click="fbupload") fbsupasdf
               
 
@@ -33,10 +33,11 @@ section.app.bg-gray-800
 
 // import studentListing from '../archive/fsup-students'
 // import hardwareListing from '../archive/fsup-hardware'
-import db from '../firebase'
+import { db } from '../firebase'
 import shortid from 'shortid'
 var hri = require('human-readable-ids').hri;
 export default {  
+  name:"frontpage",
   data() {
     return {
       studentId:"",

@@ -1,6 +1,6 @@
-# CovCath-Ordering
+# covCath-Ordering
 
-> My slick Nuxt.js project
+> My sensational Nuxt.js project
 
 ## Build Setup
 
