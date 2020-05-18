@@ -58,7 +58,7 @@ section#deviceRequests
 // Status - status
 
 import firebase from 'firebase'
-// import db from '../../firebase'
+// import { db } from '../../firebase'
 
 export default {
   name: 'deviceRequests',   

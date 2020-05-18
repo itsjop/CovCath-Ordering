@@ -33,7 +33,7 @@ section.app.bg-gray-800
 
 // import studentListing from '../archive/fsup-students'
 // import hardwareListing from '../archive/fsup-hardware'
-import db from '../firebase'
+import { db } from '../firebase'
 import shortid from 'shortid'
 var hri = require('human-readable-ids').hri;
 export default {  
