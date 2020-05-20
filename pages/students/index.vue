@@ -11,13 +11,13 @@ FINAL TODO:
 ✓ Put the right Laptop Specs in the FB Database
 ✓ Fix Body Inheritance expanding with content
 <template lang="pug">
-section#deviceRequests
+section#students
   .container(class="w-3/4")  
     button.bg-blue-500.hover_bg-blue-700.text-white.font-bold.py-2.px-4.rounded(@click="showModal") Add Student
     h1 Sorting and searching coming very soon!
-    t-table(:headers="headers" :data="students")
+    t-table.text-left(:headers="headers" :data="students")
       template(v-slot:row='props')
-        tr.text-center.text-gray-800.border-0(:class="[props.trClass, props.rowIndex % 2 === 0 ? 'bg-gray-100' : '']")
+        tr.text-left.text-gray-800.border-0(:class="[props.trClass, props.rowIndex % 2 === 0 ? 'bg-gray-100' : '']")
           td.assistance(:class='props.tdClass') 
             select.block.w-full.bg-gray-200.border.border-gray-200.text-gray-700.py-3.px-4.pr-8.rounded.leading-tight.focus_outline-none.focus_bg-white.focus_border-gray-500(
                 v-model="props.row.assistancePercent" @change="fbSync($event.target.value, props.row.id, 'assistancePercent')")            
@@ -228,7 +228,9 @@ export default {
 </script>
 
 <style lang="stylus">
-#deviceRequests
+#students
+  display grid
+  justify-items center
   .VueTables__table 
     background white
     color black
