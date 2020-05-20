@@ -10,6 +10,7 @@ module.exports = {
   plugins: [],  
   separator: '_',
   corePlugins: {
+    appearance: ['responsive', 'hover', 'focus'],
   },
-  purge: false
+  purge: false,
 }

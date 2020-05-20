@@ -2,7 +2,7 @@
 // TODO: Programatically check if there's not a user wit the Routing ID, and if so, send them back to the front page.
 section#studentModelCheck.justify-center.flex-col.align-center
   script(type="application/javascript" src="js.stripe.com/v3")
-  h1.text-center.text-4xl Welcome, {{studentInfo[0] ? studentInfo[0].name : ''}}!
+  h1.text-center.text-4xl Welcome, {{studentInfo[0] ? (studentInfo[0].preferredName ? studentInfo[0].preferredName : studentInfo[0].firstName) +" "+ studentInfo[0].lastName : ''}}!
   .specsheet.flex.justify-center.sm_px-12.md_p-0(class='w-full')
     .model.bg-white.rounded-md.border-8.border-white.border-solid.text-gray-800.p-5.grid(class='w-full lg_w-1/2 md_w-3/4' v-if="modelList" v-for="model in modelList")
       h1.title.font-bold.text-3xl {{model.title}}
@@ -16,9 +16,9 @@ section#studentModelCheck.justify-center.flex-col.align-center
         p(v-for="disclaimer in model.disclaimers") {{disclaimer}}
       .price(v-if="studentInfo[0]")
         button.text-white.bg-blue-500.rounded.p-4.px-4.mt-8(@click="showModal") Purchase for 
-          span.tag(v-if="studentInfo[0].assistance")
+          span.tag(v-if="studentInfo[0].assistancePercent !=='0'")
             span.line-through ${{(model.price/100).toFixed(2)}}
-            span ${{((model.price - studentInfo[0].assistance)/100).toFixed(2)}}
+            span &nbsp;${{((model.price * (1.0 -(Number(studentInfo[0].assistancePercent)/100)))/100).toFixed(2)}} ({{studentInfo[0].assistancePercent}}% off{{Number(studentInfo[0].assistancePercent)>50 ? "!" : ''}})
           span.tag(v-else)
             span ${{(model.price/100).toFixed(2)}}
       //- stripe-checkout.buybutton.bg-blue-500.text-white.font-bold.py-2.px-4.rounded.hover_bg-blue-700(
@@ -28,10 +28,10 @@ section#studentModelCheck.justify-center.flex-col.align-center
       //-   | i wanna buy it!!
   
   transition(name="fade")
-    t-modal( ref="modal") 
+    t-modal( ref="modal" hideCloseButton="true") 
       .mod.text-gray-800.grid.justify-center.content-around.h-full
         h1.text-center.font-light.text-3xl Before you Check Out:
-        h1.text-center.font-light.text-xl.mt-8 After finishing checkout, do 
+        h1.text-center.font-light.text-xl.mt-8 After submitting your information, do 
           span.font-bold not 
           | close your browser, or your registration will 
           span.font-bold not 
@@ -77,10 +77,32 @@ export default {
       }).then(querySnapshot => {
         var stripe = Stripe(process.env.NUXT_ENV_STRIPE_PUBLISH_TEST_KEY);
         var checkoutButton = document.getElementById('checkout-button-sku_HEL9wQzNu9XFG1');
+        let discountSku = "sku_HEL9wQzNu9XFG1"
+        if(this.studentInfo[0].assistancePercent === "0"  ) discountSku = "sku_HIn9wxYZrMH0a7"
+        if(this.studentInfo[0].assistancePercent === "5"  ) discountSku = "sku_HJUy21Ha5yy1r2"
+        if(this.studentInfo[0].assistancePercent === "10" ) discountSku = "sku_HJUyEJ7CJ6dRie"
+        if(this.studentInfo[0].assistancePercent === "15" ) discountSku = "sku_HJUzcns1st3qF5"
+        if(this.studentInfo[0].assistancePercent === "20" ) discountSku = "sku_HJV15pyWZalB4q"
+        if(this.studentInfo[0].assistancePercent === "25" ) discountSku = "sku_HJV2ns7rC0pA3k"
+        if(this.studentInfo[0].assistancePercent === "30" ) discountSku = "sku_HJV2cZyW05gp8q"
+        if(this.studentInfo[0].assistancePercent === "35" ) discountSku = "sku_HJV3G699pMOprS"
+        if(this.studentInfo[0].assistancePercent === "40" ) discountSku = "sku_HJV4rxbWAnF7Nf"
+        if(this.studentInfo[0].assistancePercent === "45" ) discountSku = "sku_HJV4igYguOxkrw"
+        if(this.studentInfo[0].assistancePercent === "50" ) discountSku = "sku_HJV4mOuX4hWmEU"
+        if(this.studentInfo[0].assistancePercent === "55" ) discountSku = "sku_HJV5nEhJf5Wtg3"
+        if(this.studentInfo[0].assistancePercent === "60" ) discountSku = "sku_HJV5XDbbchpHLW"
+        if(this.studentInfo[0].assistancePercent === "65" ) discountSku = "sku_HJV5AnVm7qaDs0"
+        if(this.studentInfo[0].assistancePercent === "70" ) discountSku = "sku_HJV6ZF01fuwXLA"
+        if(this.studentInfo[0].assistancePercent === "75" ) discountSku = "sku_HJV6a1i1ZWMNoI"
+        if(this.studentInfo[0].assistancePercent === "80" ) discountSku = "sku_HJV6UhgOF8XRSO"
+        if(this.studentInfo[0].assistancePercent === "85" ) discountSku = "sku_HJV762wmQsYmsl"
+        if(this.studentInfo[0].assistancePercent === "90" ) discountSku = "sku_HJV7D14JWs1bCq"
+        if(this.studentInfo[0].assistancePercent === "95" ) discountSku = "sku_HJV7kacHNfdDsK"
+        if(this.studentInfo[0].assistancePercent === "100") discountSku = "sku_HJV88Sq0AJbFju"
         stripe.redirectToCheckout({
-          items: [{sku: 'sku_HEL9wQzNu9XFG1', quantity: 1}],
-          successUrl: `http://localhost:3000/${this.studentInfo[0].code}/success/${this.studentInfo[0].id}`,
-          cancelUrl: `http://localhost:3000/${this.studentInfo[0].code}/check`,        
+          items: [{sku: discountSku, quantity: 1}],
+          successUrl: `http://localhost:3000/success/${this.studentInfo[0].code}/${this.studentInfo[0].id}`,
+          cancelUrl: `http://localhost:3000/checkout/${this.studentInfo[0].code}`,        
           clientReferenceId: this.studentInfo[0].code,
         })
         .then(function (result) {

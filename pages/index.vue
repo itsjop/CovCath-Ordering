@@ -18,7 +18,7 @@ section.app.bg-gray-800
                 )
             .text-center.mt-6
               nuxt-link.text-white.text-sm.font-bold.px-6.py-3.rounded.shadow.outline-none.mr-1.mb-1.w-full.active_bg-gray-700.hover_shadow-lg.focus_outline-none(
-                :to="studentId+/check/" 
+                :to="'checkout/'+studentId"
                 :event="studentId.length > 0 ? 'click' : ''" 
                 :class="validCode ? 'bg-green-500 cursor-pointer' : 'bg-gray-500 cursor-not-allowed' " 
                 type='button' 
@@ -33,22 +33,56 @@ section.app.bg-gray-800
 
 // import studentListing from '../archive/fsup-students'
 // import hardwareListing from '../archive/fsup-hardware'
-import { db } from '../firebase'
-import shortid from 'shortid'
-var hri = require('human-readable-ids').hri;
+
+import newStudents from '../archive/newStudents'
+  import { db } from '../firebase'
+  import shortid from 'shortid'
+  var hri = require('human-readable-ids').hri;
 export default {  
   name:"frontpage",
   data() {
     return {
       studentId:"",
-      // studentList: studentListing,
+      studentList: newStudents,
       // hardwareList: hardwareListing
     }
   },  
   
   methods:{    
     submitCode(){    
-      if (this.validCode) $nuxt.$router.replace({ path: '/'+this.studentId+"/check" });
+      if (this.validCode) $nuxt.$router.replace({ path: 'checkout/'+this.studentId+"/" });
+    },
+    fbupload(){ // // New student listings
+      this.studentList.map(student =>{
+        student.code = hri.random()
+        student.id = shortid.generate()
+      })
+      // check for dupes before upload
+      this.studentList.forEach(function(obj) {
+        console.log("student")
+        db.collection("students").doc(obj.id).set({            
+          code: obj.code,
+          id: obj.id,
+          assistancePercent: 0,
+          year: "2020-2021 School Year",
+          dateCreated: new Date(),
+          fullName: obj.fullName,
+          grade: obj.grade,
+          formalName: obj.formalName,
+          firstName: obj.firstName,
+          lastName: obj.lastName,
+          preferredName: obj.preferredName,
+          paid: false,
+          paymentStatus: "uninitiated",
+          organizationId: "covcath",
+        }).then(function() {
+            console.log("Document written with ID: ", obj.id);
+        })
+        .catch(function(error) {
+            console.error("Error adding document: ", error);
+        });
+      }); 
+      console.log("we did it")
     }
   },
   components: {
@@ -176,3 +210,32 @@ export default {
 //     });
 //   });
 //   }
+
+// // New student listings
+// this.studentList.map(student =>{
+//   student.code = hri.random()
+//   student.id = shortid.generate()
+// })
+// // check for dupes before upload
+// this.studentList.forEach(function(obj) {
+//   console.log("student")
+//   db.collection("students").doc(obj.id).set({            
+//     code: obj.code,
+//     id: obj.id,
+//     assistancePercent: 0,
+//     year: "2020-2021 School Year",
+//     dateCreated: new Date(),
+//     fullName: obj.fullName,
+//     grade: obj.grade,
+//     formalName: obj.formalName,
+//     firstName: obj.firstName,
+//     lastName: obj.lastName,
+//     preferredName: obj.preferredName,
+//     organizationId: "covcath"
+//   }).then(function() {
+//       console.log("Document written with ID: ", obj.id);
+//   })
+//   .catch(function(error) {
+//       console.error("Error adding document: ", error);
+//   });
+// });
