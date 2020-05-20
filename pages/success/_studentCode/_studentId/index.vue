@@ -15,7 +15,6 @@ section#success.grid.justify-center.align-center
         h1.text-center
           span.font-bold Do not close the page 
           span or your order will not be automatically confirmed.
-        button(@click="allConfirmed=!allConfirmed") TOGGLE
     transition(name="fade")
       .confirmation.top-0(v-if="allConfirmed" ) 
         .valid-order(v-if="validOrder")

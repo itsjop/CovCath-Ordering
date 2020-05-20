@@ -1,22 +1,18 @@
 <template lang="pug">
-section#site-header
-  header
+section#site-header.bg-blue-200
+  header.text-xl.font-light.text-blue-800.underline
     nuxt-link(to="/")
       img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Covington_Catholic_High_School_logo.svg/1200px-Covington_Catholic_High_School_logo.svg.png") 
       
-    nuxt-link(to="/users" v-if="authenticatedUser")
-      h1 Users
-      
-    nuxt-link(to="/requests" v-if="authenticatedUser")
-      h1 Device Requests 
-        span.text-red-600 (new!)
+    nuxt-link(to="/students" v-if="authenticatedUser")
+      h1 Student Listing
       
     nuxt-link(to="/register" v-if="authenticatedUser")
       h1 Register New Account
 
-    .logcheck.grid.justify-center(v-if="authenticatedUser") 
-      p Welcome, {{authenticatedUser.email}}
-      button.border-2.border-gray-900.border-solid.px-2.rounded(@click.prevent='logout') log out      
+    .logcheck.grid.justify-center.no-underline.cursor-default(v-if="authenticatedUser") 
+      p.no-underline.italic Welcome, {{authenticatedUser.email}}
+      button.border-2.border-gray-900.bg-blue-800.text-white.border-solid.rounded(@click.prevent='logout') log out      
 
     nuxt-link(to="/login" v-if="!authenticatedUser")
       h1 Login
@@ -53,7 +49,6 @@ export default {
   header
     width 100vw
     height 100%
-    background-color skyblue 
     position fixed
     top 0
     display flex

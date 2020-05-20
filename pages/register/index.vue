@@ -1,8 +1,8 @@
 <template lang="pug">
-section#register
-  h1.text-xl Register
-  .login.bg-white.grid
-    user-auth-form(buttonText="Register" :submitForm="registerUser" registering=true)
+section#register.grid.p-8
+  .register.bg-white.grid.p-8.w-full.rounded(class="lg_w-1/2")
+    h1.text-xl.text-blue-800 Register a new account:
+    user-auth-form(buttonText="Register" :submitForm="registerUser" :authed="thisAuth" registering=true)
 
 
 
@@ -20,6 +20,7 @@ export default {
   name: 'register',   
   data() {
     return {
+      thisAuth: false
     }
   },  
   methods: {
@@ -30,6 +31,14 @@ export default {
   components:{
     userAuthForm
   },
+  beforeMount(){    
+    firebase.auth().onAuthStateChanged(user => (this.authenticatedUser = user))
+    if(!firebase.auth().currentUser) {
+      this.thisAuth = true
+      $nuxt.$router.replace({ path: '/' });      
+      this.$toast.error("Access denied. You are not logged in.")
+    }
+  },
   props: {
   }
 }
@@ -37,6 +46,11 @@ export default {
 
 <style lang="stylus">
 #register
-  .login
+  grid-template-columns 1fr
+  grid-template-rows min-content
+  justify-items center
+  .register
+    grid-template-columns 1fr 1fr
     justify-items center
+    align-items center
 </style>

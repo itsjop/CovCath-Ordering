@@ -56,9 +56,9 @@ body
     #site-header header
       height var(--header-size)
       position relative
-    section:nth-child(2) 
+    >section:nth-child(2) 
       // page container selector, uses nth() because it could be anything
-      position: absolute
+      // position: absolute
       top var(--header-size)
       min-width 100vw
       min-height calc(100vh - var(--header-size))

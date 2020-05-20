@@ -1,7 +1,7 @@
 <template lang="pug">
-section#LoginPage
-  h1.text-xl Login
-  .login.bg-white.grid
+section#loginPage.grid.p-8
+  .login.bg-white.grid.p-8.w-full.rounded(class="lg_w-1/2")
+    h1.text-xl.text-blue-800 Login to your account:
     user-auth-form(buttonText="Login" :submitForm="loginUser")
 
 
@@ -17,7 +17,7 @@ import firebase from "firebase";
 import userAuthForm from '../../components/UserAuthForm/UserAuthForm'
 
 export default {
-  name: 'LoginPage',   
+  name: 'loginPage',   
   data() {
     return {
     }
@@ -61,7 +61,12 @@ export default {
 </script>
 
 <style lang="stylus">
-#LoginPage
+#loginPage
+  grid-template-columns 1fr
+  grid-template-rows min-content
+  justify-items center
   .login
+    grid-template-columns 1fr 1fr
     justify-items center
+    align-items center
 </style>

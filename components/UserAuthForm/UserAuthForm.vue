@@ -1,15 +1,15 @@
 <template lang="pug">
 section#userAuthForm  
-  .text-black(v-if='authenticatedUser')
+  .text-black(v-if='authenticatedUser && !registering')
     p You are logged in as {{ authenticatedUser.email }}.
     p Logout?
     button(@click.prevent='logout') Logout
   .text-black(v-else='')
-    form.grid(@submit.prevent='loginOrRegister')
-      input(type='email' v-model='email' placeholder='Your email address')
-      input(type='password' v-model='password' placeholder='Your password')
-      input(v-if='registering' type='password' v-model='registrationPassword' placeholder='Re-enter Password')
-      button(v-text="registering ? 'Register' : 'Login'")
+    form.grid.gap-2(@submit.prevent='loginOrRegister')
+      input.border-b-2.border-solid.border-blue-800(type='email' v-model='email' placeholder='Your email address')
+      input.border-b-2.border-solid.border-blue-800(type='password' v-model='password' placeholder='Your password')
+      input.border-b-2.border-solid.border-blue-800(v-if='registering' type='password' v-model='registrationPassword' placeholder='Re-enter Password')
+      button.bg-blue-500.text-white.font-bold.py-2.rounded(v-text="registering ? 'Register new account' : 'Login'")
     .error {{errorMessage}}
 </template>
 
@@ -30,25 +30,29 @@ export default {
   },
   methods: {
     register() {
-      if (this.password === this.registrationPassword) {
-        if(authenticatedUser){
-          firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(()=>{            
-            this.$toast.success("Account created. Please check your mail for a verification link.")
-          }).catch(error => {
-            this.$toast.error("Error: "+error)
-          })  
-        }else{          
-          this.$toast.error("You are not logged in. You must be an authorized user to create another's account.")
+      if(!this.authed){
+        if (this.password === this.registrationPassword) {
+          if(this.authenticatedUser){
+            firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(()=>{            
+              this.$toast.success("Account created. Please check your mail for a verification link.")
+            }).catch(error => {
+              this.$toast.error("Error: "+error)
+            })  
+          }else{          
+            this.$toast.error("You are not logged in. You must be an authorized user to create another's account.")
+          }
+        } else {
+          // display error message
+          this.errorMessage = "Your passwords do not match. Try again."
         }
-      } else {
-        // display error message
-        this.errorMessage = "Your passwords do not match. Try again."
+      }else{        
+        this.$toast.error("Nice try.")
       }
     },
     login() {
       firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(()=>{
         this.$toast.success("Success! You are now logged in.")
-        $nuxt.$router.replace({ path: '/users' });
+        $nuxt.$router.replace({ path: '/students' });
       }).catch(error => {
         this.$toast.error("Error: "+error)
       })        
@@ -88,7 +92,9 @@ export default {
     firebase.auth().onAuthStateChanged(user => (this.authenticatedUser = user))
   },
   props: {
-    registering: Boolean
+    registering: Boolean,
+    authed: Boolean,
+    
   }
 }
 </script>
