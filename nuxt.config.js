@@ -32,6 +32,7 @@ module.exports = {
   //   extractCSS: true,
   // },  
   
+  chainWebpack: config => config.resolve.symlinks(false), // fuck this shbit
   build: {
     extractCSS: true,
     transpile: ['vuetify/lib'],
