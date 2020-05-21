@@ -1,6 +1,11 @@
 
-export default {
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
+// const pkg = require('./package')
+
+module.exports = {
   mode: 'universal',
+  srcDir: 'src',
+  buildDir: 'functions/.nuxt',
   /*
   ** Headers of the page
   */
@@ -18,10 +23,37 @@ export default {
       { hid: 'stripe', src: 'https://js.stripe.com/v3/', defer: true }
     ]
   }, 
+  // build: {
+  //   extend (config, { isDev, isClient }) {
+  //     if (isDev && isClient) {
+  //       node: {fs: 'empty'}
+  //     }
+  //   },
+  //   extractCSS: true,
+  // },  
+  
   build: {
-    extend (config, { isDev, isClient }) {
-      if (isDev && isClient) {
-        node: {fs: 'empty'}
+    extractCSS: true,
+    transpile: ['vuetify/lib'],
+    plugins: [new VuetifyLoaderPlugin()],
+    loaders: {
+      stylus: {
+        import: ['~assets/style/variables.styl']
+      }
+    },
+
+    /*
+    ** You can extend webpack config here
+    */
+    extend(config, ctx) {
+      // Run ESLint on save
+      if (ctx.isDev && ctx.isClient) {
+        config.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /(node_modules)/
+        })
       }
     }
   },
@@ -69,21 +101,13 @@ export default {
   },
 
   /* Setting Global Auth */
-  router: {
-    // middleware: ['auth']
-  },
+  // router: {
+  //   // middleware: ['auth']
+  // },
 
   stripe: {
     version: 'v3',
     publishableKey: process.env.NUXT_ENV_STRIPE_PUBLISH_TEST_KEY || '',
-  },
-
-  /* Build configuration  */
-  build: {
-    /*    ** You can extend webpack config here    */
-    extend (config, ctx) {
-    },
-    // analyze: true,
   },
   
   pwa: {
