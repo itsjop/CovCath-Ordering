@@ -1,6 +1,6 @@
 
 export default {
-  mode: 'universal',
+  mode: 'spa',
   /*
   ** Headers of the page
   */
@@ -24,6 +24,12 @@ export default {
         node: {fs: 'empty'}
       }
     }
+  },  
+  router: {
+    mode: 'hash'
+  },
+  generate: {
+    fallback: "custom_sap_fallbackpage.html"
   },
   /* Customize the progress-bar color  */
   loading: { color: '#fff' },
