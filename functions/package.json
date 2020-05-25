@@ -1,22 +1,45 @@
 {
   "name": "functions",
   "description": "Cloud Functions for Firebase",
+  "engines": {
+    "node": "10"
+  },
   "scripts": {
-    "serve": "firebase emulators:start --only functions",
+    "serve": "firebase serve --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
-  "engines": {
-    "node": "8"
-  },
   "dependencies": {
-    "firebase-admin": "^8.10.0",
-    "firebase-functions": "^3.6.0"
+    "@nuxtjs/pwa": "^2.6.0",
+    "@nuxtjs/tailwindcss": "^1.0.0",
+    "add": "2.0.6",
+    "axios": "^0.19.2",
+    "cross-env": "^5.2.0",
+    "express": "^4.16.4",
+    "firebase": "^7.14.5",
+    "firebase-admin": "8.12.1",
+    "firebase-functions": "3.6.1",
+    "firebase-tools": "8.4.0",
+    "human-readable-ids": "^1.0.4",
+    "nuxt": "^2.3.4",
+    "shortid": "^2.2.15",
+    "vue-stripe-checkout": "^3.3.1",
+    "vue-tailwind": "^0.4.6",
+    "vuefire": "^2.2.2",
+    "yarn": "1.22.4",
+    "firebaseui": "^4.5.0",
+    "node-fetch": "^2.6.0",
+    "nuxt-stripe-module": "^2.0.0",
+    "stripe": "^8.52.0",
+    "vue-stripe-elements-plus": "^0.3.2",
+    "vue-tables-2": "^2.0.23",
+    "vue-tailwind-modal": "0.0.7",
+    "vue-the-mask": "^0.11.1"
   },
   "devDependencies": {
-    "firebase-functions-test": "^0.2.0"
+    "firebase-functions-test": "^0.1.6"
   },
   "private": true
 }
