@@ -1,14 +1,15 @@
 <template lang="pug">
 section.app.bg-gray-800
   .container.mx-auto.px-4.h-full.mt-16
+    h1 Welcome to Covington Catholic Order Portal
     .flex.content-center.items-center.justify-center.h-full
       .relative.flex.flex-col.min-w-0.break-words.w-full.mb-6.shadow-lg.rounded-lg.bg-gray-100.border-0
         .rounded-t.mb-0.px-6.py-6
           .text-center.mb-3
-            h6.text-gray-800.text-lg.font-bold Enter your ID to continue:
+            h6.text-gray-800.text-lg.font-bold Enter your Login Code to continue:
           form(@submit.prevent="submitCode")
             .relative.w-full.mb-3
-              label.block.uppercase.text-gray-800.text-xs.font-bold.mb-2(for='grid-password') Student ID
+              label.block.uppercase.text-gray-800.text-xs.font-bold.mb-2(for='grid-password') Login Code
               input.px-3.py-3.placeholder-gray-500.text-gray-800.bg-white.rounded.text-sm.shadow.w-full.focus_outline-none.focus_shadow-outline(
                 v-model="studentId" 
                 type='text' 
@@ -35,9 +36,9 @@ section.app.bg-gray-800
 // import hardwareListing from '../archive/fsup-hardware'
 
 import newStudents from '../archive/newStudents'
-  import { db } from '../firebase'
-  import shortid from 'shortid'
-  var hri = require('human-readable-ids').hri;
+import { db } from '../../firebase'
+import shortid from 'shortid'
+var hri = require('human-readable-ids').hri;
 export default {  
   name:"frontpage",
   data() {

@@ -12,7 +12,7 @@ section#register.grid.p-8
 </template>
 
 <script>
-import { db } from '../../firebase'
+import { db } from '../../../firebase'
 import firebase from "firebase";
 import userAuthForm from '../../components/UserAuthForm/UserAuthForm'
 

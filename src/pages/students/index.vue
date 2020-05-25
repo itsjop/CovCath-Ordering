@@ -98,7 +98,7 @@ section#students
 <script>
 
 import firebase from 'firebase'
-import { db } from '../../firebase'
+import { db } from '../../../firebase'
 
 import shortid from 'shortid'
 var hri = require('human-readable-ids').hri;

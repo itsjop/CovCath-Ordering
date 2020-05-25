@@ -42,8 +42,7 @@ section#studentModelCheck.justify-center.flex-col.align-center
 
 <script>
 
-import { db } from "~/firebase"
-import { StripeCheckout } from 'vue-stripe-checkout';
+import { db } from "../../../../firebase"
 import VueTailwindModal from 'vue-tailwind-modal'
 
 export default {
@@ -77,34 +76,36 @@ export default {
       }).then(querySnapshot => {
         var stripe = Stripe(process.env.NUXT_ENV_STRIPE_PUBLISH_TEST_KEY);
         var checkoutButton = document.getElementById('checkout-button-sku_HEL9wQzNu9XFG1');
-        let discountSku = "price_HJb2t1wEODoxqy"
-        if(this.studentInfo[0].assistancePercent === "0"  ) discountSku = "price_HJb2t1wEODoxqy"
-        if(this.studentInfo[0].assistancePercent === "5"  ) discountSku = "price_HJbd5wEUdS2cfM"
-        if(this.studentInfo[0].assistancePercent === "10" ) discountSku = "price_HJbe6ifT04cVdy"
-        if(this.studentInfo[0].assistancePercent === "15" ) discountSku = "price_HJbeoBHNMGztbH"
-        if(this.studentInfo[0].assistancePercent === "20" ) discountSku = "price_HJbeH2viNYMNpO"
-        if(this.studentInfo[0].assistancePercent === "25" ) discountSku = "price_HJbeq40mkHevA7"
-        if(this.studentInfo[0].assistancePercent === "30" ) discountSku = "price_HJbeEayQm6oAWb"
-        if(this.studentInfo[0].assistancePercent === "35" ) discountSku = "price_HJbeEHqm6IOx3k"
-        if(this.studentInfo[0].assistancePercent === "40" ) discountSku = "price_HJbeyxL9LCNROU"
-        if(this.studentInfo[0].assistancePercent === "45" ) discountSku = "price_HJbfNg3dwtZw9L"
-        if(this.studentInfo[0].assistancePercent === "50" ) discountSku = "price_HJbghkjHfsWbPu"
-        if(this.studentInfo[0].assistancePercent === "55" ) discountSku = "price_HJbghi9R3xjO8S"
-        if(this.studentInfo[0].assistancePercent === "60" ) discountSku = "price_HJbgWqrH4Fc4wb"
-        if(this.studentInfo[0].assistancePercent === "65" ) discountSku = "price_HJbgkNcQbqzkA6"
-        if(this.studentInfo[0].assistancePercent === "70" ) discountSku = "price_HJbgQP2cAju7oK"
-        if(this.studentInfo[0].assistancePercent === "75" ) discountSku = "price_HJbgMBMgxmt0eX"
-        if(this.studentInfo[0].assistancePercent === "80" ) discountSku = "price_HJbgKLPLUGVpJm"
-        if(this.studentInfo[0].assistancePercent === "85" ) discountSku = "price_HJbhaHpEKa6lYX"
-        if(this.studentInfo[0].assistancePercent === "90" ) discountSku = "price_HJbhcn61kPQ9cy"
-        if(this.studentInfo[0].assistancePercent === "95" ) discountSku = "price_HJbhDyLAGjhirl"
-        if(this.studentInfo[0].assistancePercent === "100") discountSku = "price_HJbh9mBnynn7Ng"
+        // GBS SKUs
+        let discountSku = "sku_HIn9wxYZrMH0a7"
+        if(this.studentInfo[0].assistancePercent === "0"  ) discountSku = "sku_HIn9wxYZrMH0a7"
+        if(this.studentInfo[0].assistancePercent === "5"  ) discountSku = "sku_HJUy21Ha5yy1r2"
+        if(this.studentInfo[0].assistancePercent === "10" ) discountSku = "sku_HJUyEJ7CJ6dRie"
+        if(this.studentInfo[0].assistancePercent === "15" ) discountSku = "sku_HJUzcns1st3qF5"
+        if(this.studentInfo[0].assistancePercent === "20" ) discountSku = "sku_HJV15pyWZalB4q"
+        if(this.studentInfo[0].assistancePercent === "25" ) discountSku = "sku_HJV2ns7rC0pA3k"
+        if(this.studentInfo[0].assistancePercent === "30" ) discountSku = "sku_HJV2cZyW05gp8q"
+        if(this.studentInfo[0].assistancePercent === "35" ) discountSku = "sku_HJV3G699pMOprS"
+        if(this.studentInfo[0].assistancePercent === "40" ) discountSku = "sku_HJV4rxbWAnF7Nf"
+        if(this.studentInfo[0].assistancePercent === "45" ) discountSku = "sku_HJV4igYguOxkrw"
+        if(this.studentInfo[0].assistancePercent === "50" ) discountSku = "sku_HJV4mOuX4hWmEU"
+        if(this.studentInfo[0].assistancePercent === "55" ) discountSku = "sku_HJV5nEhJf5Wtg3"
+        if(this.studentInfo[0].assistancePercent === "60" ) discountSku = "sku_HJV5XDbbchpHLW"
+        if(this.studentInfo[0].assistancePercent === "65" ) discountSku = "sku_HJV5AnVm7qaDs0"
+        if(this.studentInfo[0].assistancePercent === "70" ) discountSku = "sku_HJV6ZF01fuwXLA"
+        if(this.studentInfo[0].assistancePercent === "75" ) discountSku = "sku_HJV6a1i1ZWMNoI"
+        if(this.studentInfo[0].assistancePercent === "80" ) discountSku = "sku_HJV6UhgOF8XRSO"
+        if(this.studentInfo[0].assistancePercent === "85" ) discountSku = "sku_HJV762wmQsYmsl"
+        if(this.studentInfo[0].assistancePercent === "90" ) discountSku = "sku_HJV7D14JWs1bCq"
+        if(this.studentInfo[0].assistancePercent === "95" ) discountSku = "sku_HJV7kacHNfdDsK"
+        if(this.studentInfo[0].assistancePercent === "100") discountSku = "sku_HJV88Sq0AJbFju"
+
         stripe.redirectToCheckout({
           // items: [{sku: discountSku, quantity: 1}],          
           lineItems: [{price: discountSku, quantity: 1}],
           mode: 'payment',
-          successUrl: `http://localhost:3000/success/${this.studentInfo[0].code}/${this.studentInfo[0].id}`,
-          cancelUrl: `http://localhost:3000/checkout/${this.studentInfo[0].code}`,        
+          successUrl: `http://localhost:5000/success/${this.studentInfo[0].code}/${this.studentInfo[0].id}`,
+          cancelUrl: `http://localhost:5000/checkout/${this.studentInfo[0].code}`,        
           clientReferenceId: this.studentInfo[0].code,
         })
         .then(function (result) {
@@ -119,7 +120,6 @@ export default {
     }
   },
   components: {
-    StripeCheckout,
     VueTailwindModal,
   },
   props: {
@@ -196,3 +196,28 @@ export default {
   if(this.studentInfo[0].assistancePercent === "90" ) discountSku = "sku_HJV7D14JWs1bCq"
   if(this.studentInfo[0].assistancePercent === "95" ) discountSku = "sku_HJV7kacHNfdDsK"
   if(this.studentInfo[0].assistancePercent === "100") discountSku = "sku_HJV88Sq0AJbFju"
+
+  
+// CovCath Live Keys
+let discountSku = "price_HJb2t1wEODoxqy"
+if(this.studentInfo[0].assistancePercent === "0"  ) discountSku = "price_HJb2t1wEODoxqy"
+if(this.studentInfo[0].assistancePercent === "5"  ) discountSku = "price_HJbd5wEUdS2cfM"
+if(this.studentInfo[0].assistancePercent === "10" ) discountSku = "price_HJbe6ifT04cVdy"
+if(this.studentInfo[0].assistancePercent === "15" ) discountSku = "price_HJbeoBHNMGztbH"
+if(this.studentInfo[0].assistancePercent === "20" ) discountSku = "price_HJbeH2viNYMNpO"
+if(this.studentInfo[0].assistancePercent === "25" ) discountSku = "price_HJbeq40mkHevA7"
+if(this.studentInfo[0].assistancePercent === "30" ) discountSku = "price_HJbeEayQm6oAWb"
+if(this.studentInfo[0].assistancePercent === "35" ) discountSku = "price_HJbeEHqm6IOx3k"
+if(this.studentInfo[0].assistancePercent === "40" ) discountSku = "price_HJbeyxL9LCNROU"
+if(this.studentInfo[0].assistancePercent === "45" ) discountSku = "price_HJbfNg3dwtZw9L"
+if(this.studentInfo[0].assistancePercent === "50" ) discountSku = "price_HJbghkjHfsWbPu"
+if(this.studentInfo[0].assistancePercent === "55" ) discountSku = "price_HJbghi9R3xjO8S"
+if(this.studentInfo[0].assistancePercent === "60" ) discountSku = "price_HJbgWqrH4Fc4wb"
+if(this.studentInfo[0].assistancePercent === "65" ) discountSku = "price_HJbgkNcQbqzkA6"
+if(this.studentInfo[0].assistancePercent === "70" ) discountSku = "price_HJbgQP2cAju7oK"
+if(this.studentInfo[0].assistancePercent === "75" ) discountSku = "price_HJbgMBMgxmt0eX"
+if(this.studentInfo[0].assistancePercent === "80" ) discountSku = "price_HJbgKLPLUGVpJm"
+if(this.studentInfo[0].assistancePercent === "85" ) discountSku = "price_HJbhaHpEKa6lYX"
+if(this.studentInfo[0].assistancePercent === "90" ) discountSku = "price_HJbhcn61kPQ9cy"
+if(this.studentInfo[0].assistancePercent === "95" ) discountSku = "price_HJbhDyLAGjhirl"
+if(this.studentInfo[0].assistancePercent === "100") discountSku = "price_HJbh9mBnynn7Ng"

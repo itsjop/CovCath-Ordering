@@ -27,7 +27,7 @@ section#success.grid.justify-center.align-center
 
 
 <script>
-import { db } from "~/firebase"
+import { db } from "../../../../../firebase"
 export default {
   name: 'success',   
   data() {

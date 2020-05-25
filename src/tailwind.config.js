@@ -7,5 +7,10 @@
 module.exports = {
   theme: {},
   variants: {},
-  plugins: []
+  plugins: [],  
+  separator: '_',
+  corePlugins: {
+    appearance: ['responsive', 'hover', 'focus'],
+  },
+  purge: false,
 }
