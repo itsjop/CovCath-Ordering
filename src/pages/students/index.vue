@@ -12,12 +12,12 @@ FINAL TODO:
 ✓ Fix Body Inheritance expanding with content
 <template lang="pug">
 section#students
-  .container(class="w-3/4")  
-    button.bg-blue-500.hover_bg-blue-700.text-white.font-bold.py-2.px-4.rounded(@click="showModal") Add Student
-    h1 Sorting and searching coming very soon!
-    t-table.text-left(:headers="headers" :data="students")
+  .container.my-8.rounded.grid(class="w-full max-w-screen-xl")  
+    button.my-2.bg-blue-500.hover_bg-blue-700.text-white.font-bold.py-2.px-4.rounded.w-56(@click="showModal") Add New Student
+    //- h1 Sorting and searching coming very soon!
+    t-table.vtable.text-left(:headers="headers" :data="students")
       template(v-slot:row='props')
-        tr.text-left.text-gray-800.border-0(:class="[props.trClass, props.rowIndex % 2 === 0 ? 'bg-gray-100' : '']")
+        tr.text-left.text-gray-800(:class="[props.trClass, props.rowIndex % 2 === 0 ? 'bg-gray-100' : '']")
           td.assistance(:class='props.tdClass') 
             select.block.w-full.bg-gray-200.border.border-gray-200.text-gray-700.py-3.px-4.pr-8.rounded.leading-tight.focus_outline-none.focus_bg-white.focus_border-gray-500(
                 v-model="props.row.assistancePercent" @change="fbSync($event.target.value, props.row.id, 'assistancePercent')")            
@@ -42,34 +42,39 @@ section#students
               option(value='90') 90%
               option(value='95') 95%
               option(value='100') 100%
-          td.first-name(:class="{'text-red-500': props.row.amountDue > 0, 'text-green-500': props.row.amountDue <= 0 }") 
+          td.first-name.border-l-2.pl-4(:class="{'text-red-500': props.row.amountDue > 0, 'text-green-500': props.row.amountDue <= 0 }") 
             | {{props.row.firstName}} 
-          td.last-name(:class='props.tdClass')
+          td.last-name.border-l-2.pl-4(:class='props.tdClass')
             | {{props.row.lastName}}
-          td.grade(:class='props.tdClass')
-            | {{props.row.grade}}
-          td.payment-status.capitalize(:class='props.tdClass')
-            select.block.appearance-none.w-full.bg-gray-200.border.border-gray-200.text-gray-700.py-3.px-4.pr-8.rounded.leading-tight.focus_outline-none.focus_bg-white.focus_border-gray-500(
+          td.grade.border-l-2.pl-4(:class='props.tdClass')
+            | {{grades[Number(props.row.grade) - 8].text}}
+          td.login-code.border-l-2.pl-4(:class='props.tdClass')
+            | {{props.row.code}}
+          td.payment-status.capitalize.border-l-2.pl-4(:class='props.tdClass')
+            select.block.w-full.bg-gray-200.border.border-gray-200.text-gray-700.py-3.px-4.pr-8.rounded.leading-tight.focus_outline-none.focus_bg-white.focus_border-gray-500(
                 v-model="props.row.paymentStatus" @change="fbSync($event.target.value, props.row.id, 'paymentStatus')")            
               option(value='uninitiated') Uninitiated
               option(value='unconfirmed') Unconfirmed
               option(value='completed') Completed
-          td.serial(:class='props.tdClass')
+          td.serial.border-l-2.pl-4(:class='props.tdClass')
             input(class="border-b-2 border-solid" v-model="props.row.serialNumber" @input="fbSync($event.target.value, props.row.id, 'serialNumber')" debounce="5000")
+          td.serial.border-l-2.pl-4(:class='props.tdClass')
+            textarea(class="border-b-2 border-solid" v-model="props.row.notes" @input="fbSync($event.target.value, props.row.id, 'notes')" debounce="5000")
           //- td.year(:class='props.tdClass')
           //-   | {{props.row.datePaid ? new Date(props.row.datePaid).toLocaleDateString() : "No Date"}}
-          td(:class='props.tdClass')
-            transition(name="fade")
-              p(v-if="!props.row.sync") ✓
-              p.spin(v-else) ↻
+          //- td.text-center(:class='props.tdClass')
+          //-   p(:class="props.row.sync ? 'spin' : ''") {{props.row.sync ? '↻' : '✓'}} {{props.row.sync}}
 
   t-modal(wrapper-class="bg-blue-100 border-blue-400 text-blue-700 rounded shadow-xl flex flex-col"
-          overlay-class="z-40 overflow-auto left-0 top-0 bottom-0 right-0 w-full h-full fixed bg-blue-900 opacity-75"
+          overlay-class="z-30 overflow-auto left-0 top-0 bottom-0 right-0 w-full h-full fixed bg-blue-900 opacity-75"
+          container-class = 'z-40 relative p-3 mx-auto my-0 max-w-full'
           body-class="text-xl flex flex-col items-center justify-center p-6 flex-grow"
+          baseClass="z-40 overflow-auto left-0 top-0 bottom-0 right-0 w-full h-full fixed" 
           footerClass="bg-blue-400 p-3 flex justify-between"
           ref="modal"
           @closed="updateRow()"
-          transition="ease") 
+          transition="ease"
+          hideCloseButton=true) 
     t-input-group(label="First Name")
       t-input(v-model="newStudent.firstName" type="text")
     t-input-group(label="Last Name")
@@ -99,17 +104,17 @@ section#students
 
 import firebase from 'firebase'
 import { db } from '../../../firebase'
+
 import shortid from 'shortid'
 var hri = require('human-readable-ids').hri;
 
 import VueTailwind from 'vue-tailwind'
 import TInput from 'vue-tailwind/src/elements/TInput.vue'
 import TSelect from 'vue-tailwind/src/elements/TSelect.vue'
+import TButton from 'vue-tailwind/src/elements/TButton.vue'
 import TTable from 'vue-tailwind/src/components/TTable.vue'
 import TInputGroup from 'vue-tailwind/src/components/TInputGroup.vue'
 import TModal from 'vue-tailwind/src/components/TModal.vue'
-
-
 
 export default {
   name: 'students',   
@@ -137,6 +142,10 @@ export default {
           value: 'grade',
           text: 'Grade',
         }, {
+          id: 'login-id',
+          value: 'code',
+          text: 'Login Code',
+        }, {
           id: 'paymentStatus-id',
           value: 'paymentStatus',
           text: 'Payment Status',
@@ -144,11 +153,16 @@ export default {
           id: 'serialNumber-id',
           value: 'serialNumber',
           text: 'Serial Number',
-        }, {
-          id: 'sync-id',
-          value: 'sync',
-          text: 'Saved?',
-        }, 
+        }, { 
+          id: 'notes-id',
+          value: 'notes',
+          text: 'Notes',
+        },
+        //  {
+        //   id: 'sync-id',
+        //   value: 'sync',
+        //   text: 'Saved?',
+        // }, 
       ],
       tempRow:{},
       errors:null,
@@ -161,10 +175,29 @@ export default {
       ]
     }
   },
-  firestore: {
-    students: db.collection('students')
-    // students: db.collection('students').orderBy('paid'),
+  created(){
+    let query = db.collection('students').get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          console.log('No matching documents.');
+          return;
+        }  
+        snapshot.forEach(doc => {
+          this.students.push(doc.data())
+        });
+        this.students.forEach(stu => {
+          stu.sync = false
+        });
+      })
+      .catch(err => {
+        console.log('Error getting documents', err);
+      });
   },
+  // firestore() {    
+  //   return {
+  //     students: db.collection('students').orderBy('paid'),
+  //   }
+  // },
   methods:{
     showModal(){
       this.$refs.modal.show()
@@ -202,9 +235,10 @@ export default {
         ).then(ob => {
           console.log("Document written with ID: ", this.newStudent.id);    
           this.$toast.success("Student succesfully added!")
-          // this.students.unshift(this.newStudent)
+          this.students.unshift(this.newStudent)
           this.newStudent = []
           this.cancelModal()
+          
         })
       }
     },    
@@ -216,8 +250,11 @@ export default {
       this.students[this.students.findIndex((stu) => stu.id === id)].sync =  true      
       db.collection('students').doc(id).update({
         [prop]: val
-      }).then(querySnapshot => {        
+      }).then(querySnapshot => {   
+        console.log("turn off")     
         this.students[this.students.findIndex((stu) => stu.id === id)].sync =  false   
+        console.log(this.students[this.students.findIndex((stu) => stu.id === id)].sync)
+       
       })
     }
   },
@@ -229,6 +266,7 @@ export default {
     TTable,
     TInputGroup ,
     TModal,
+    TButton,
   },
   beforeMount(){    
     firebase.auth().onAuthStateChanged(user => (this.authenticatedUser = user))
@@ -245,6 +283,8 @@ export default {
 #students
   display grid
   justify-items center
+  button
+    justify-self end
   .VueTables__table 
     background white
     color black
@@ -256,6 +296,13 @@ export default {
     transform-origin 50% 53%
   .fuggit
     min-width 275px
+  .vtable
+    thead
+      tr
+        border-style none
+  .pointer-events-none, button
+    svg
+      display none
 @keyframes spin {
   from{
     transform: rotate(0deg)

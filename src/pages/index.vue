@@ -1,7 +1,7 @@
 <template lang="pug">
 section.app.bg-gray-800
   .container.mx-auto.px-4.h-full.mt-16
-    h1 Welcome to Covington Catholic Order Portal
+    h1.text-center.text-3xl.pb-4 Welcome to the Covington Catholic Order Portal!
     .flex.content-center.items-center.justify-center.h-full
       .relative.flex.flex-col.min-w-0.break-words.w-full.mb-6.shadow-lg.rounded-lg.bg-gray-100.border-0
         .rounded-t.mb-0.px-6.py-6
@@ -10,7 +10,7 @@ section.app.bg-gray-800
           form(@submit.prevent="submitCode")
             .relative.w-full.mb-3
               label.block.uppercase.text-gray-800.text-xs.font-bold.mb-2(for='grid-password') Login Code
-              input.px-3.py-3.placeholder-gray-500.text-gray-800.bg-white.rounded.text-sm.shadow.w-full.focus_outline-none.focus_shadow-outline(
+              input.px-3.py-3.placeholder-gray-600.text-gray-800.bg-white.rounded.text-sm.shadow.w-full.focus_outline-none.focus_shadow-outline(
                 v-model="studentId" 
                 type='text' 
                 :class=" (studentId.length <15)? '' : (validCode  ? 'greeen' : '')"
@@ -24,7 +24,7 @@ section.app.bg-gray-800
                 :class="validCode ? 'bg-green-500 cursor-pointer' : 'bg-gray-500 cursor-not-allowed' " 
                 type='button' 
                 style='transition: all 0.15s ease 0s;')
-                | {{studentId.length === 0 ? "Enter your ID." :(validCode ? "Sign in" : "Not a valid ID.")}}
+                | {{studentId.length === 0 ? "Enter your Code." :(validCode ? "Sign in" : "Not a valid Code.")}}
           //- button.button.bg-blue-500(@click="fbupload") fbsupasdf
               
 

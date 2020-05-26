@@ -15,7 +15,7 @@ section#site-header.bg-blue-200
       button.border-2.border-gray-900.bg-blue-800.text-white.border-solid.rounded(@click.prevent='logout') log out      
 
     nuxt-link(to="/login" v-if="!authenticatedUser")
-      h1 Login
+      h1 Admin Login
 </template> 
 
 <script>
