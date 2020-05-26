@@ -5,6 +5,8 @@
   "author": "Jordan Crandall",
   "private": true,
   "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon src/server/index.js --watch server",
+    "start": "cross-env NODE_ENV=production node src/server/index.js",
     "build": "nuxt build",
     "build:firebase": "yarn clean && yarn build && yarn copy && cd functions && yarn",
     "clean": "yarn clean:public && yarn clean:functions && yarn clean:static",
@@ -40,7 +42,6 @@
     "vue-stripe-elements-plus": "^0.3.2",
     "vue-tables-2": "^2.0.23",
     "vue-tailwind": "^0.4.6",
-    "vue-tailwind-modal": "0.0.7",
     "vue-the-mask": "^0.11.1",
     "vuefire": "^2.2.2"
   },

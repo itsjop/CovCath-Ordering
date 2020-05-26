@@ -99,9 +99,18 @@ section#students
 
 import firebase from 'firebase'
 import { db } from '../../../firebase'
-
 import shortid from 'shortid'
 var hri = require('human-readable-ids').hri;
+
+import VueTailwind from 'vue-tailwind'
+import TInput from 'vue-tailwind/src/elements/TInput.vue'
+import TSelect from 'vue-tailwind/src/elements/TSelect.vue'
+import TTable from 'vue-tailwind/src/components/TTable.vue'
+import TInputGroup from 'vue-tailwind/src/components/TInputGroup.vue'
+import TModal from 'vue-tailwind/src/components/TModal.vue'
+
+
+
 export default {
   name: 'students',   
   data() {
@@ -153,7 +162,8 @@ export default {
     }
   },
   firestore: {
-    students: db.collection('students').orderBy('paid'),
+    students: db.collection('students')
+    // students: db.collection('students').orderBy('paid'),
   },
   methods:{
     showModal(){
@@ -213,8 +223,12 @@ export default {
   },
   props: {
   },
-  compontents:{
-    ClientTable:"v-client-table"
+  components:{
+    TInput,
+    TSelect,
+    TTable,
+    TInputGroup ,
+    TModal,
   },
   beforeMount(){    
     firebase.auth().onAuthStateChanged(user => (this.authenticatedUser = user))

@@ -32,8 +32,8 @@ section.app.bg-gray-800
 
 <script>
 
-// import studentListing from '../archive/fsup-students'
-// import hardwareListing from '../archive/fsup-hardware'
+import studentListing from '../archive/fsup-students'
+import hardwareListing from '../archive/fsup-hardware'
 
 import newStudents from '../archive/newStudents'
 import { db } from '../../firebase'
@@ -44,8 +44,9 @@ export default {
   data() {
     return {
       studentId:"",
-      studentList: newStudents,
-      // hardwareList: hardwareListing
+      newStudents: newStudents,
+      hardwareList: hardwareListing,
+      studentList: hardwareListing
     }
   },  
   
@@ -53,38 +54,8 @@ export default {
     submitCode(){    
       if (this.validCode) $nuxt.$router.replace({ path: 'checkout/'+this.studentId+"/" });
     },
-    fbupload(){ // // New student listings
-      this.studentList.map(student =>{
-        student.code = hri.random()
-        student.id = shortid.generate()
-      })
-      // check for dupes before upload
-      this.studentList.forEach(function(obj) {
-        console.log("student")
-        db.collection("students").doc(obj.id).set({            
-          code: obj.code,
-          id: obj.id,
-          assistancePercent: 0,
-          year: "2020-2021 School Year",
-          dateCreated: new Date(),
-          fullName: obj.fullName,
-          grade: obj.grade,
-          formalName: obj.formalName,
-          firstName: obj.firstName,
-          lastName: obj.lastName,
-          preferredName: obj.preferredName,
-          paid: false,
-          paymentStatus: "uninitiated",
-          organizationId: "covcath",
-        }).then(function() {
-            console.log("Document written with ID: ", obj.id);
-        })
-        .catch(function(error) {
-            console.error("Error adding document: ", error);
-        });
-      }); 
-      console.log("we did it")
-    }
+    fbupload(){ 
+  }
   },
   components: {
   },

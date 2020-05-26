@@ -34,8 +34,6 @@ module.exports = {
   ],
   buildModules: [
     '@nuxtjs/tailwindcss',    
-    // '@nuxtjs/vuetify',    
-    // "@nuxtjs/vuetify": "^1.11.2",
   ],
   modules: [
     '@nuxtjs/pwa',

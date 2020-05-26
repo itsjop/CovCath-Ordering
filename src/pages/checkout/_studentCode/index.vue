@@ -41,7 +41,6 @@ section#studentModelCheck.justify-center.flex-col.align-center
 <script>
 
 import { db } from "../../../../firebase"
-import VueTailwindModal from 'vue-tailwind-modal'
 
 export default {
   name: 'studentModelCheck',   
@@ -116,7 +115,6 @@ export default {
     }
   },
   components: {
-    VueTailwindModal,
   },
   props: {
   }

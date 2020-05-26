@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "gbs-student-hardware"
+    "default": "gbs-student-hardware",
+    "student-orders": "student-orders"
   }
 }
