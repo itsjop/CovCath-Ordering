@@ -12,10 +12,23 @@ FINAL TODO:
 ✓ Fix Body Inheritance expanding with content
 <template lang="pug">
 section#students
-  .container.my-8.rounded.grid(class="w-full max-w-screen-xl")  
-    button.my-2.bg-blue-500.hover_bg-blue-700.text-white.font-bold.py-2.px-4.rounded.w-56(@click="showModal") Add New Student
-    //- h1 Sorting and searching coming very soon!
-    t-table.vtable.text-left(:headers="headers" :data="students")
+  .container.my-8.rounded(class="w-full max-w-screen-xl")  
+    .flex.justify-between.bg-blue-200.rounded-t.px-4.py-2
+      .grid.grid-flow-col.gap-10
+        t-input-group(label="Search Columns:")
+          t-input.rounded.text-gray-800.placeholder-gray-800(v-model="search" placeholder="Search...")
+        t-input-group(label="Sort by:")
+          select.block.w-full.bg-white.border.border-gray-200.text-gray-700.py-3.px-4.pr-8.rounded.leading-tight.focus_outline-none.focus_bg-white.focus_border-gray-500(v-model="sortProp")            
+            option(value='assistancePercent') Assistance Amount
+            option(value='firstName') First Name
+            option(value='lastName') Last Name
+            option(value='grade') Grade
+            option(value='code') Login Code
+            option(value='paymentStatus') Payment Status
+            option(value='serialNumber') Serial Number
+        button.my-2.bg-gray-700.hover_bg-gray-600.text-white.font-bold.py-2.px-4.rounded.h-16(@click="sortDir = !sortDir") Reverse Sort
+      button.my-2.bg-blue-500.hover_bg-blue-700.text-white.font-bold.py-2.px-4.rounded.w-56(@click="showModal") Add New Student
+    t-table.vtable.text-left(:headers="headers" :data="filterList")
       template(v-slot:row='props')
         tr.text-left.text-gray-800(:class="[props.trClass, props.rowIndex % 2 === 0 ? 'bg-gray-100' : '']")
           td.assistance(:class='props.tdClass') 
@@ -64,6 +77,14 @@ section#students
           //-   | {{props.row.datePaid ? new Date(props.row.datePaid).toLocaleDateString() : "No Date"}}
           //- td.text-center(:class='props.tdClass')
           //-   p(:class="props.row.sync ? 'spin' : ''") {{props.row.sync ? '↻' : '✓'}} {{props.row.sync}}
+    .justify-between.bg-blue-200.rounded-b.px-4.py-2.mb-8
+      .controls.grid.grid-flow-col.gap-10
+        h1.text-blue-700.text-2xl Other Controls:   
+        t-input-group(label="Export Students:")
+          button.bg-gray-600.p-2(@click="downloadCSV") Generate CSV
+        t-input-group(label="View Old Data:")
+          t-select.text-gray-800(v-model="selectedYear" name="my-input" @change="pullStudents" :options="pastYears")
+
 
   t-modal(wrapper-class="bg-blue-100 border-blue-400 text-blue-700 rounded shadow-xl flex flex-col"
           overlay-class="z-30 overflow-auto left-0 top-0 bottom-0 right-0 w-full h-full fixed bg-blue-900 opacity-75"
@@ -107,6 +128,7 @@ import { db } from '../../../firebase'
 
 import shortid from 'shortid'
 var hri = require('human-readable-ids').hri;
+const ObjectsToCsv = require('objects-to-csv');
 
 import VueTailwind from 'vue-tailwind'
 import TInput from 'vue-tailwind/src/elements/TInput.vue'
@@ -121,8 +143,12 @@ export default {
   data() {
     return {      
       newStudent:{},
+      selectedYear: String(new Date().getFullYear()),
+      search: "",
+      sortProp: "",
       students:[],
       authenticatedUser:"",
+      sortDir: true,
       headers: [
         {
           id: 'assistancePercent-id',
@@ -176,7 +202,65 @@ export default {
     }
   },
   created(){
-    let query = db.collection('students').get()
+    this.pullStudents()
+  },
+  // firestore() {    
+  //   return {
+  //     students: db.collection('students').orderBy('paid'),
+  //   }
+  // },
+  methods:{
+    convertArrayOfObjectsToCSV(args) {  
+        var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+
+        data = args.data || null;
+        if (data == null || !data.length) {
+            return null;
+        }
+
+        columnDelimiter = args.columnDelimiter || ',';
+        lineDelimiter = args.lineDelimiter || '\n';
+
+        keys = Object.keys(data[0]);
+
+        result = '';
+        result += keys.join(columnDelimiter);
+        result += lineDelimiter;
+
+        data.forEach(function(item) {
+            ctr = 0;
+            keys.forEach(function(key) {
+                if (ctr > 0) result += columnDelimiter;
+
+                result += item[key];
+                ctr++;
+            });
+            result += lineDelimiter;
+        });
+
+        return result;
+    },
+    downloadCSV(args) {  
+        var data, filename, link;
+        var csv = this.convertArrayOfObjectsToCSV({
+            data: this.students
+        });
+        if (csv == null) return;
+
+        filename = './Exported Student Hardware List ('+(new Date().toLocaleDateString())+').csv';
+
+        if (!csv.match(/^data:text\/csv/i)) {
+            csv = 'data:text/csv;charset=utf-8,' + csv;
+        }
+        data = encodeURI(csv);
+
+        link = document.createElement('a');
+        link.setAttribute('href', data);
+        link.setAttribute('download', filename);
+        link.click();
+    },
+    pullStudents(){
+       let query = db.collection('students').where('year', '==', this.selectedYear).get()
       .then(snapshot => {
         if (snapshot.empty) {
           console.log('No matching documents.');
@@ -192,13 +276,7 @@ export default {
       .catch(err => {
         console.log('Error getting documents', err);
       });
-  },
-  // firestore() {    
-  //   return {
-  //     students: db.collection('students').orderBy('paid'),
-  //   }
-  // },
-  methods:{
+    },
     showModal(){
       this.$refs.modal.show()
     },
@@ -225,9 +303,9 @@ export default {
           dateCreated: new Date(),
           paid: false,
           paymentStatus: "uninitiated",
-          serial: "",
+          serialNumber: "",
           organizationId: "covcath",
-          year: "2020-2021"        
+          year: String(new Date().getFullYear())
         });
         let temp = this.newStudent
         db.collection("students").doc(this.newStudent.id).set(
@@ -258,7 +336,39 @@ export default {
       })
     }
   },
-  props: {
+  computed: {
+    filterList(){
+      let list = this.students
+      if (this.search){
+        list = list.filter(student => 
+          String(student.assistancePercent).toLowerCase().includes(this.search.toLowerCase()) ||
+          student.firstName.toLowerCase().includes(this.search.toLowerCase()) ||
+          student.lastName.toLowerCase().includes(this.search.toLowerCase()) ||
+          String(student.grade).toLowerCase().includes(this.search.toLowerCase()) ||
+          student.code.toLowerCase().includes(this.search) ||
+          student.paymentStatus.toLowerCase().includes(this.search.toLowerCase()) ||
+          (student.serialNumber ? student.serialNumber.toLowerCase().includes(this.search.toLowerCase()) : "") ||
+          (student.notes ? student.notes.toLowerCase().includes(this.search.toLowerCase()) : "")
+        )
+        console.log('list', list)
+      }
+      if (this.sortProp){
+        let sort = this.sortDir ? 1 : -1
+        list = list.sort((a, b) => (a[this.sortProp].toLowerCase() > b[this.sortProp].toLowerCase()) ? sort : -sort)
+      }
+      return list
+    },
+    pastYears(){
+      let years = []
+      let currentYear = Number(new Date().getFullYear())
+      let yearsSince = currentYear - 2020
+
+      years.push({ value: 2020 , text: String(2020) })
+      for(let i = 0; i < yearsSince; i++) { 
+        years.push({ value: 2020 + i, text: String(2020 + i) })
+      }
+      return years
+    }
   },
   components:{
     TInput,
@@ -296,6 +406,9 @@ export default {
     transform-origin 50% 53%
   .fuggit
     min-width 275px
+  .controls
+    justify-items center
+    align-items center
   .vtable
     thead
       tr
@@ -303,12 +416,16 @@ export default {
   .pointer-events-none, button
     svg
       display none
-@keyframes spin {
+  // tr
+  //   animation slide .5s forwards
+@keyframes slide {
   from{
-    transform: rotate(0deg)
+    transform: translateX(30%)
+    opacity: 0
   }
   to{
-    transform: rotate(360deg)
+    transform: translateX(0%)
+    opacity: 1
   }
 }
 

@@ -2,8 +2,8 @@
 // TODO: Programatically check if there's not a user wit the Routing ID, and if so, send them back to the front page.
 section#studentModelCheck.justify-center.flex-col.align-center.py-8
   script(type="application/javascript" src="https://js.stripe.com/v3")
-  h1.text-center.text-4xl Welcome, {{studentInfo ? (studentInfo.preferredName ? studentInfo.preferredName : studentInfo.firstName) +" "+ studentInfo.lastName : ''}}!
-  .specsheet.flex.justify-center.sm_px-12.md_p-0(class='w-full')
+  h1.text-center.text-4xl(v-if="studentInfo") Welcome, {{studentInfo ? (studentInfo.preferredName ? studentInfo.preferredName : studentInfo.firstName) +" "+ studentInfo.lastName : ''}}!
+  .specsheet.flex.justify-center.sm_px-12.md_p-0(v-if="studentInfo" class='w-full')
     .model.bg-white.rounded-md.border-8.border-white.border-solid.text-gray-800.p-5.grid(class='w-full md_w-3/4' v-if="modelList" v-for="model in modelList")
       h1.title.font-bold.text-3xl {{model.title}}
       img(:src="model.image")
@@ -16,7 +16,7 @@ section#studentModelCheck.justify-center.flex-col.align-center.py-8
         p(v-for="disclaimer in model.disclaimers") {{disclaimer}}
       .price(v-if="studentInfo")
         button.text-white.bg-blue-500.rounded.p-4.px-4.mt-8(@click="showModal") Purchase for 
-          span.tag(v-if="studentInfo.assistancePercent !=='0'")
+          span.tag(v-if="String(studentInfo.assistancePercent) !=='0'")
             span.line-through ${{(model.price/100).toFixed(2)}}
             span &nbsp;${{((model.price * (1.0 -(Number(studentInfo.assistancePercent)/100)))/100).toFixed(2)}} ({{studentInfo.assistancePercent}}% off{{Number(studentInfo.assistancePercent)>50 ? "!" : ''}})
           span.tag(v-else)
@@ -26,6 +26,16 @@ section#studentModelCheck.justify-center.flex-col.align-center.py-8
       //- template(slot='checkout-button')
       //- nuxt-link.buybutton.bg-blue-500.text-white.font-bold.py-2.px-4.rounded.hover_bg-blue-700( :to="'/'+$route.params.studentCode+'/checkout/'")
       //-   | i wanna buy it!!
+  
+  .cube-holder.mt-8.transform.relative.w-12.pb-8(v-else)
+    .sk-chase
+      .sk-chase-dot
+      .sk-chase-dot
+      .sk-chase-dot
+      .sk-chase-dot
+      .sk-chase-dot
+      .sk-chase-dot
+
   t-modal.modal-custom( wrapper-class="bg-blue-100 border-blue-400 text-blue-700 rounded shadow-xl flex flex-col"
                         overlay-class="z-30 overflow-auto left-0 top-0 bottom-0 right-0 w-full h-full fixed bg-blue-900 opacity-75"
                         body-class="text-xl flex flex-col items-center justify-center p-6 flex-grow"
@@ -74,15 +84,16 @@ export default {
     db.collection('students').where('code', '==', this.$route.params.studentCode).get()
       .then(snapshot => {
         if (snapshot.empty) {
-          console.log('No matching documents.');
-          return;
+          $nuxt.$router.replace({ path: '/' });      
+          this.$toast.error("Sorry. No one with that code exists. Check your spelling and try again.")
         }  
         snapshot.forEach(doc => {
           console.log(doc.id, '=>', doc.data());
           this.studentInfo = doc.data()
         });
       }).catch(err => {
-        console.log('Error getting documents', err);
+        $nuxt.$router.replace({ path: '/' });      
+        this.$toast.error("Sorry. No one with that code exists. Check your spelling and try again.")
       });
   },
 
@@ -210,6 +221,65 @@ export default {
       z-index 50
     div:nth-child(2)
       background-color #00000088
+  .cube-holder
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+.sk-chase {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  animation: sk-chase 2.5s infinite linear both;
+}
+
+.sk-chase-dot {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0; 
+  animation: sk-chase-dot 2.0s infinite ease-in-out both; 
+}
+
+.sk-chase-dot:before {
+  content: '';
+  display: block;
+  width: 25%;
+  height: 25%;
+  background-color: white;
+  border-radius: 100%;
+  animation: sk-chase-dot-before 2.0s infinite ease-in-out both; 
+}
+
+.sk-chase-dot:nth-child(1) { animation-delay: -1.1s; }
+.sk-chase-dot:nth-child(2) { animation-delay: -1.0s; }
+.sk-chase-dot:nth-child(3) { animation-delay: -0.9s; }
+.sk-chase-dot:nth-child(4) { animation-delay: -0.8s; }
+.sk-chase-dot:nth-child(5) { animation-delay: -0.7s; }
+.sk-chase-dot:nth-child(6) { animation-delay: -0.6s; }
+.sk-chase-dot:nth-child(1):before { animation-delay: -1.1s; }
+.sk-chase-dot:nth-child(2):before { animation-delay: -1.0s; }
+.sk-chase-dot:nth-child(3):before { animation-delay: -0.9s; }
+.sk-chase-dot:nth-child(4):before { animation-delay: -0.8s; }
+.sk-chase-dot:nth-child(5):before { animation-delay: -0.7s; }
+.sk-chase-dot:nth-child(6):before { animation-delay: -0.6s; }
+
+@keyframes sk-chase {
+  100% { transform: rotate(360deg); } 
+}
+
+@keyframes sk-chase-dot {
+  80%, 100% { transform: rotate(360deg); } 
+}
+
+@keyframes sk-chase-dot-before {
+  50% {
+    transform: scale(0.4); 
+  } 100%, 0% {
+    transform: scale(1.0); 
+  } 
+}
 
 </style>
 

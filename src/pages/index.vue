@@ -36,6 +36,7 @@ import studentListing from '../archive/fsup-students'
 import hardwareListing from '../archive/fsup-hardware'
 
 import newStudents from '../archive/newStudents'
+
 import { db } from '../../firebase'
 import shortid from 'shortid'
 var hri = require('human-readable-ids').hri;
@@ -55,6 +56,37 @@ export default {
       if (this.validCode) $nuxt.$router.replace({ path: 'checkout/'+this.studentId+"/" });
     },
     fbupload(){ 
+
+// // New student listings
+  this.newStudents.map(student =>{
+    student.code = hri.random()
+    student.id = shortid.generate()
+  })
+  // check for dupes before upload
+  this.newStudents.forEach(function(obj) {
+    console.log("student")
+    db.collection("students").doc(obj.id).set({            
+      code: obj.code,
+      id: obj.id,
+      assistancePercent: 0,
+      year: "2020",
+      dateCreated: new Date(),
+      grade: obj.grade,
+      firstName: obj.firstName,
+      lastName: obj.lastName,
+      preferredName: obj.preferredName ? obj.preferredName : "",
+      organizationId: "covcath",
+      notes: "",
+      serialNumber: "",
+      paid: false,
+      paymentStatus: "uninitiated"
+    }).then(function() {
+        console.log("Document written with ID: ", obj.id);
+    })
+    .catch(function(error) {
+        console.error("Error adding document: ", error);
+    });
+  });
   }
   },
   components: {
